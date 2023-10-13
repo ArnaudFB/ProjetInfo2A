@@ -1,9 +1,9 @@
 from database.init_db import Database
-from rare.utils.singleton import SingleInstance
+from utils.Singleton import Singleton
 from data.Station import Station
 import sqlite3
 
-class DAOStation(metaclass=SingleInstance):
+class DAOStation(metaclass=Singleton):
     
     # Create method to create a new Station in the database
     def addNewStation(self, station: Station) -> bool:
@@ -35,3 +35,5 @@ class DAOStation(metaclass=SingleInstance):
             station_name = res['nom']
             return station_name
         return f"unable to find a station name with UUID = {uuid}"
+    
+
