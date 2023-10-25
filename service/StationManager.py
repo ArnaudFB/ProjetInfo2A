@@ -65,4 +65,3 @@ class StationManager():
         nearest_station = min(distance)[1]
         return nearest_station
         
-        
