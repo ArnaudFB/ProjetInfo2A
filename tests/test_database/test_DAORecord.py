@@ -51,7 +51,7 @@ class TestDAORecord(unittest.TestCase):
         # Assertion
         self.assertEqual(result, f"unable to find a record for station {self.non_existing_station_uuid} between {self.date_start} and {self.date_end}")
 
-    def test_getVarByDate_existing(self):
+    def test_getVarStationByDate_existing(self):
         # Action
         records = self.dao_record.getVarByDate( self.date_start, self.date_end)
 
@@ -59,7 +59,7 @@ class TestDAORecord(unittest.TestCase):
         self.assertIsInstance(records, list)
         self.assertTrue(len(records) > 0)
 
-    def test_getVarByDate_invalid_dates(self):
+    def test_getVarStationByDate_invalid_dates(self):
         # Test avec des dates invalides (hors de la plage)
         date_start = datetime.datetime(2022, 12, 30)
         date_end = datetime.datetime(2023, 12, 31)
@@ -67,14 +67,14 @@ class TestDAORecord(unittest.TestCase):
         result = self.dao_record.getVarByDate(date_start, date_end)
         self.assertEqual(result, f"unable to find a record between {date_start} and {date_end}")
 
-    def test_getVarByDate_database_error(self):
+    def test_getVarStationByDate_database_error(self):
         # Test pour simuler une erreur de base de données
         date_start = datetime.datetime(2023, 1, 1)
         date_end = datetime.datetime(2023, 1, 5)
 
         self.dao_record.getConnection = MagicMock(side_effect=Exception("Database connection error"))
 
-        result = your_instance.getVarByDate(date_start, date_end)
+        result = self.dao_record.getVarByDate(date_start, date_end)
         self.assertEqual(result, "Database connection error")
 
     
