@@ -3,6 +3,7 @@ from data.Location import Location
 from database.DAOStation import DAOStation
 from api.api_handler import getStations
 from vincenty import vincenty
+import httpx
 
 class StationManager():
     
