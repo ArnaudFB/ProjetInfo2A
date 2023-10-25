@@ -60,7 +60,7 @@ class StationManager():
         for station in data_station["velibs"]:
             
             dist = vincenty(loc, (station["station"]["longitude"],station["station"]["latitude"]))
-            distance.append((dist, station["station"]["uuid"]))
+            distance.append((dist, station["station"]["name"]))
         
         nearest_station = min(distance)[1]
         return nearest_station

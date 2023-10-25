@@ -25,7 +25,7 @@ async def getNearestStation(user_location: str = Query((48.8563199, 2.31345367))
     
     station = StationManager.getNearestStation(station, user_location)
     
-    return station
+    return f"The nearest station to your location is the station : {station}"
     
             
 
