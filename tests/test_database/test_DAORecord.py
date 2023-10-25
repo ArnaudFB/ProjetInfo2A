@@ -77,6 +77,38 @@ class TestDAORecord(unittest.TestCase):
         result = self.dao_record.getVarByDate(date_start, date_end)
         self.assertEqual(result, "Database connection error")
 
+
+    def test_getVarByArrDate_existing_records(self):
+
+        dao_record = DAORecord()
+        arrondissement = 16  
+        date_start = datetime.datetime(2023, 1, 1)
+        date_end = datetime.datetime(2023, 1, 5)
+
+        result = dao_record.getVarByArrDate(arrondissement, date_start, date_end)
+        self.assertIsInstance(result, list)
+        self.assertTrue(len(result) > 0)
+
+    def test_getVarByArrDate_no_records(self):
+        # Test sans enregistrements pour l'arrondissement et la période donnés
+        dao_record = DAORecord()
+        arrondissement = 30 
+        date_start = datetime.datetime(2023, 1, 1)
+        date_end = datetime.datetime(2023, 1, 5)
+
+        result = dao_record.getVarByArrDate(arrondissement, date_start, date_end)
+        self.assertEqual(result, f"unable to find a record between {date_start} and {date_end} in arrondissement {arrondissement}")
+
+
+    def test_getVarByArrDate_invalid_dates(self):
+        dao_record = DAORecord()
+        arrondissement = 16
+        date_start = datetime.datetime(2023, 1, 5)  # Date de fin antérieure à la date de début
+        date_end = datetime.datetime(2023, 1, 1)
+
+        result = dao_record.getVarByArrDate(arrondissement, date_start, date_end)
+        self.assertEqual(result, f"unable to find a record between {date_start} and {date_end} in arrondissement {arrondissement}")
+
     
 if __name__ == '__main__':
     unittest.main()

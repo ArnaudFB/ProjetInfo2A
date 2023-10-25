@@ -4,7 +4,6 @@ from data.Record import Record
 import sqlite3
 from datetime import datetime 
 
-# TODO : Change first method to connect to the correct table and extract expected values
 
 class DAORecord(metaclass=Singleton):
     
@@ -64,3 +63,25 @@ class DAORecord(metaclass=Singleton):
                 records.append(record)
             return records
         return f"unable to find a record between {date_start} and {date_end}"
+
+    def getVarByArrDate(self, arrondissement : int , date_start : datetime.datetime, date_end : datetime.datetime) -> list[tuple]:
+        
+        with Database.getConnection as connection:
+            cursor = connection.cursor()
+            sqlGetRecord = """SELECT variation FROM Record r
+                            INNER JOIN Date d on d.uuid=r.date_uuid
+                            INNER JOIN Station s on s.uuid=r.station_uuid 
+                            WHERE (s.arrondissement=%(arrondissement)s )
+                            AND(date_minute>= %(date_start)s) 
+                            AND (date_minute<= %(date_end)s)  """
+            cursor.execute(sqlGetRecord, {"arrondissement": arrondissement, 
+                                        "date_start": date_start,
+                                        "date_end": date_end})
+            res = cursor.fetchall()
+        if res:
+            records=[]
+            for r in range(len(res)): 
+                record = res[r]['variation']
+                records.append(record)
+            return records
+        return f"unable to find a record between {date_start} and {date_end} in arrondissement {arrondissement}"
