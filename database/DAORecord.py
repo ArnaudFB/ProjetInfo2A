@@ -25,7 +25,7 @@ class DAORecord(metaclass=Singleton):
             return not(created)
         return created
     
-    def getRecordByStationDate(self, station_uuid: int, date_start : datetime.datetime, date_end : datetime.datetime) -> list[int]:
+    def getVarByStationDate(self, station_uuid: int, date_start : datetime.datetime, date_end : datetime.datetime) -> list[int]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -46,7 +46,7 @@ class DAORecord(metaclass=Singleton):
             return records
         return f"unable to find a record for station {station_uuid} between {date_start} and {date_end}"
 
-    def getRecordByDate(self, date_start : datetime.datetime, date_end : datetime.datetime) -> list[int]:
+    def getVarByDate(self, date_start : datetime.datetime, date_end : datetime.datetime) -> list[int]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
