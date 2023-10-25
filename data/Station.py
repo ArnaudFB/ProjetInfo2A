@@ -2,14 +2,12 @@ from data.Record import Record
 from data.Location import Location
 class Station:
     
-    def __init__(self, station_id: int, station_name: str, loc: Location, history: list[Record]):
+    def __init__(self, station_id: int, station_name: str, loc: Location):
         self._stationId = station_id
         self._stationName = station_name
         self.__loc = loc
-        self._history = []
-        for record in history :
-            if isinstance(record , Record):
-                self._history += [record]
+
+
                     
     @property
     def getStationID(self) -> int:

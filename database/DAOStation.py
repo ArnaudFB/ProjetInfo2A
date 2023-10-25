@@ -3,6 +3,7 @@ from utils.Singleton import Singleton
 from data.Station import Station
 import sqlite3
 
+
 class DAOStation(metaclass=Singleton):
     
     # Create method to create a new Station in the database
@@ -36,4 +37,4 @@ class DAOStation(metaclass=Singleton):
             return station_name
         return f"unable to find a station name with UUID = {uuid}"
     
-
+    
