@@ -1,4 +1,8 @@
 fastapi
 requests
 uvicorn
+<<<<<<< HEAD
 httpx
+=======
+httpx
+>>>>>>> 76e242b9cb5d39fde0554e9903a61d6685f41e53
