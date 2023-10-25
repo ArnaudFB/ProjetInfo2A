@@ -15,6 +15,7 @@ class Database(metaclass=Singleton):
         # Create the Station table
         initialize_station_request = """CREATE TABLE IF NOT EXISTS Station (
             uuid INT PRIMARY KEY,
+            arrondissement INT,
             nom TEXT,
             lon NUMERIC(10, 6),
             lat NUMERIC(10, 6)
