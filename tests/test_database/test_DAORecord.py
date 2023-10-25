@@ -74,7 +74,7 @@ class TestDAORecord(unittest.TestCase):
 
         self.dao_record.getConnection = MagicMock(side_effect=Exception("Database connection error"))
 
-        result = your_instance.getVarByDate(date_start, date_end)
+        result = self.dao_record.getVarByDate(date_start, date_end)
         self.assertEqual(result, "Database connection error")
 
     

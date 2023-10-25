@@ -60,7 +60,7 @@ class DAORecord(metaclass=Singleton):
         if res:
             records=[]
             for r in range(len(res)): 
-                record = res[r]
+                record = res[r]['station_uuid'],res[r]['variation']
                 records.append(record)
             return records
         return f"unable to find a record between {date_start} and {date_end}"
