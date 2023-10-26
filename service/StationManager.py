@@ -1,20 +1,20 @@
 from data.Station import Station
 from data.Location import Location
 from database.DAOStation import DAOStation
-from api.api_handler import getStations
 from vincenty import vincenty
+import httpx
 
 class StationManager():
     
-    # Base URL for the app
-    BASE_URL= "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel/exports/json"
+    def __init__(self, base_url: str):
+        self.base_url = base_url
     
-    async def getStations():
+    async def getStations(self):
         # Initialize an HTTP client
         async with httpx.AsyncClient() as client:
             try:
                 # Send a GET request to the OpenDataSoft API
-                response = await client.get(BASE_URL)
+                response = await client.get(self.base_url)
 
                 # Check if the request was successful (status code 200)
                 if response.status_code == 200:
@@ -52,17 +52,16 @@ class StationManager():
         return {'velibs':velib_data}
         
     
-    def getNearestStation(data, loc: Location) -> int:
+    def getNearestStation(data, loc) -> int:
         
         data_station = data
         distance = []
         
         for station in data_station["velibs"]:
             
-            dist = vincenty(loc, (station["coordonnees_geo"]["lon"],station["coordonnees_geo"]["lat"]))
-            distance.append((dist, station["uuid"]))
+            dist = vincenty(loc, (station["station"]["longitude"],station["station"]["latitude"]))
+            distance.append((dist, station["station"]["name"]))
         
         nearest_station = min(distance)[1]
         return nearest_station
-        
         
