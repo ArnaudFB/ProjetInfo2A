@@ -17,7 +17,7 @@ class StationManager():
     def __init__(self, base_url: str):
         self.base_url = base_url
     
-    async def getStations(self):
+    async def get_stations(self):
         # Initialize an HTTP client
         async with httpx.AsyncClient() as client:
             try:
@@ -35,7 +35,7 @@ class StationManager():
             except Exception as e:
                 return {"error": str(e)}  
     
-    def getAvailableStation(data):
+    def get_available_station(data):
         
         data_station = data
         velib_data = []
@@ -60,7 +60,7 @@ class StationManager():
         return {'velibs':velib_data}
         
     
-    def getNearestStation(data, loc) -> int:
+    def get_nearest_station(data, loc) -> int:
         
         data_station = data
         distance = []
@@ -74,7 +74,7 @@ class StationManager():
         return nearest_station
     
         
-    def fillTables(data):
+    def fill_tables(data):
         
         data_station = data
         
@@ -103,7 +103,7 @@ class StationManager():
             DAODate.addNewDate(date=new_date)
     
     
-    def refreshStationEveryMinute(data):
+    def refresh_station_every_minute(data):
         
         data_station = data
         
