@@ -1,4 +1,5 @@
 from database.dao_record import DAORecord
+from datetime import datetime
 
 class RecordManager():
     #need to see how to compute the min (mean, numbers of Records etc... )

@@ -1,7 +1,7 @@
-from schema.station import Station
-from schema.location import Location
-from schema.date import Date
-from schema.record import Record
+from schema.Station import Station
+from schema.Location import Location
+from schema.Date import Date
+from schema.Record import Record
 from database.dao_station import DAOStation
 from database.dao_date import DAODate
 from database.dao_record import DAORecord
@@ -9,7 +9,8 @@ from database.init_db import Database
 from vincenty import vincenty
 from datetime import datetime
 import httpx
-from database import DAORecord
+import time
+from database import dao_record
 
 
 class StationManager():
