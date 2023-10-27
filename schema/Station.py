@@ -1,8 +1,6 @@
-<<<<<<< HEAD
+
 from schema.record import Record
 from schema.location import Location
-class Station:
-=======
 from pydantic import BaseModel, field_validator
 from schema.Location import Location
 class Station(BaseModel):
@@ -45,8 +43,6 @@ class Station(BaseModel):
             raise ValueError("station_arr cannot be negative")
         if v>20:
             raise ValueError("station_arr cannot be above 20")
-
->>>>>>> 952f9164f8ac0c737228f386b77471299f91964c
     
     def __init__(self, station_id: int,station_name: str, loc: Location, numbikes: int):
         self._stationId = station_id
