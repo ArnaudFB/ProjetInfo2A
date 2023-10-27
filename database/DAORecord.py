@@ -87,7 +87,7 @@ class DAORecord(metaclass=Singleton):
             return records
         return f"unable to find a record between {date_start} and {date_end} in arrondissement {arrondissement}"
 
-        def getVargroupArrByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
+    def getVargroupArrByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
