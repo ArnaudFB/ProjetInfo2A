@@ -8,6 +8,7 @@ class TestDAOStation(unittest.TestCase):
     def setUp(self):
         # Initialisation des objets nécessaires aux tests
         self.station = Station.Station(123, 'Station A', Location(10.0, 20.0))
+        self.existing_uuid = 16107
 
     def test_addNewStation(self):
  
@@ -60,8 +61,8 @@ class TestDAOStation(unittest.TestCase):
     def test_getStationArrByUUID_existing_station(self):
         # Test avec une station existante
         dao_station = DAOStation()
-        uuid=16107
-        result =dao_station.getStationArrByUUID(uuid)
+
+        result =dao_station.getStationArrByUUID(self.existing_uuid)
         self.assertEqual(result, 16)
 
     def test_getStationArrByUUID_non_existing_station(self):
@@ -75,9 +76,7 @@ class TestDAOStation(unittest.TestCase):
 
     def test_getStationLocByUUID_existing_station(self):
         dao_station = DAOStation()
-        uuid = 16107
-
-        result = your_instance.getStationLocByUUID(uuid)
+        result = dao_station.getStationLocByUUID(self.existing_uuid)
         self.assertEqual(result, (48.865983, 2.275725))  
 
     def test_getStationLocByUUID_non_existing_station(self):

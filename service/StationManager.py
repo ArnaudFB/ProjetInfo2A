@@ -9,6 +9,7 @@ from database.init_db import Database
 from vincenty import vincenty
 from datetime import datetime
 import httpx
+from database import DAORecord
 
 
 class StationManager():
@@ -75,6 +76,7 @@ class StationManager():
         
     def fillTables(data):
         
+<<<<<<< HEAD
         data_station = data
         
         for records in data_station:
@@ -137,3 +139,10 @@ class StationManager():
                     connection.close()
                 
             time.sleep(60)
+=======
+
+    def getMinFrequentation(date_start : datetime, date_end : datetime) -> int :
+        
+        variation= DAORecord.getVargroupSationByDate(date_start, date_end)
+        lessfrequented_station = min(variation, key = lambda t: t[1])[0]
+>>>>>>> 5af5e7391bd129e8a83e7f5e063beb5244710c73
