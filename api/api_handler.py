@@ -35,7 +35,7 @@ async def getFreqArr(date_debut : datetime, date_fin : datetime):
         
     arrondissement_plus_frequente = DAORecord.get_max_frequentation_arrondissement(date_debut,date_fin)
     
-    f"La station la plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
+    return f"La station la plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
     
 
 
