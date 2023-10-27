@@ -7,23 +7,25 @@ from datetime import datetime
 
 class DAORecord(metaclass=Singleton):
     
+    # Create method to add a new record to the database
     def addNewRecord(self, record: Record) -> bool:
         
         created = False
             
-        with Database.getConnection as connection:
-            cursor = connection.cursor()
+        with Database.getConnection as connection: # gets a database connection 
+            cursor = connection.cursor() # creates a cursor object to execute SQL queries 
             sqlAddStation = """INSERT INTO Record (station_uuid, date_uuid, variation )
-                            VALUES (%(station_uuid)s, %(date_uuid)s, %(variation)s)"""
+                            VALUES (%(station_uuid)s, %(date_uuid)s, %(variation)s)""" # SQL query to insert a new record
             cursor.execute(sqlAddStation, {"station_uuid": record.getStationUuid,
                                     "date_uuid": record.getDateUuid,
                                     "variation": record.getVariation,
-                                    })
-            res = cursor.fetchone()
+                                    }) # executes query using record values
+            res = cursor.fetchone() # retrieves query results
         if res:
             return not(created)
         return created
     
+    # Create method to obtain variations for a station between two dates
     def getVarByStationDate(self, station_uuid: int, date_start : datetime, date_end : datetime) -> list[int]:
         
         with Database.getConnection as connection:
@@ -45,6 +47,7 @@ class DAORecord(metaclass=Singleton):
             return records
         return f"unable to find a record for station {station_uuid} between {date_start} and {date_end}"
 
+    # Create method to obtain the sum of variations for all stations between two dates
     def getVargroupSationByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
         
         with Database.getConnection as connection:
@@ -65,6 +68,7 @@ class DAORecord(metaclass=Singleton):
             return records
         return f"unable to find a record between {date_start} and {date_end}"
 
+    # Create method to obtain variations for all stations in a district between two dates
     def getVarByArrDate(self, arrondissement : int , date_start : datetime, date_end : datetime) -> list[tuple]:
         
         with Database.getConnection as connection:
@@ -87,8 +91,9 @@ class DAORecord(metaclass=Singleton):
             return records
         return f"unable to find a record between {date_start} and {date_end} in arrondissement {arrondissement}"
 
-        def getVargroupArrByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
-        
+    # Create method to obtain variations for all stations (with their district) between two dates
+    def getVargroupArrByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
+    
         with Database.getConnection as connection:
             cursor = connection.cursor()
             sqlGetRecord = """SELECT arrondissement, sum(variation) FROM Record r

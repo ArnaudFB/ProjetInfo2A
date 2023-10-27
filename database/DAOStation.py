@@ -10,11 +10,11 @@ class DAOStation(metaclass=Singleton):
     # Create method to get all Station in the database
     def getAllStation(self, station: Station) -> dict[Station]:
         
-        with Database.getConnection as connection:
-            cursor = connection.cursor()
-            sqlGetAllStation = """SELECT * FROM Station;"""
+        with Database.getConnection as connection: # gets a database connection 
+            cursor = connection.cursor() # creates a cursor object to execute SQL queries 
+            sqlGetAllStation = """SELECT * FROM Station;""" #SQL query to select all stations 
             cursor.execute(sqlGetAllStation)
-            res = cursor.fetchall()
+            res = cursor.fetchall() # retrieves all rows in the query result as a dictionary 
         
         return
     
@@ -50,8 +50,8 @@ class DAOStation(metaclass=Singleton):
             station_name = res['nom']
             station_lon = res['lon']
             station_lat = res['lat']
-            station_loc = Location(station_lon, station_lat)
-            station = Station(station_uuid, station_name, station_loc)
+            station_loc = Location(station_lon, station_lat) # creates a Location object with the retrieved coordinates 
+            station = Station(station_uuid, station_name, station_loc) # creates a Station object with the retrieved informations 
             return station
         return f"unable to find a station name with UUID = {uuid}"
     
@@ -61,7 +61,7 @@ class DAOStation(metaclass=Singleton):
         with Database.getConnection as connection:
             cursor = connection.cursor()
             sqlGetStationArr = "SELECT arrondissement FROM Station WHERE uuid = %(uuid)s"
-            cursor.execute(sqlGetStationArr, {"uuid": uuid})
+            cursor.execute(sqlGetStationArr, {"uuid": uuid}) # executes the request using the supplied UUID
             res = cursor.fetchone()
         if res:
             station_arr = res['arrondissement']

@@ -5,7 +5,7 @@ import sqlite3
 
 class DAOStation(metaclass=Singleton):
     
-    # Create method to create a new Station in the database
+    # Create method to add a new date to the database
     def addNewDate(self, date: Date) -> bool:
         
         created = False
@@ -20,6 +20,7 @@ class DAOStation(metaclass=Singleton):
             return not(created)
         return created
     
+    # Create method to obtain a date based on its UUID
     def getDateByUUID(self, uuid: int) -> Date:
         
         with Database.getConnection as connection:
