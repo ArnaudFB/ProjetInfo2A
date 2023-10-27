@@ -2,7 +2,6 @@
 from schema.record import Record
 from schema.location import Location
 from pydantic import BaseModel, field_validator
-from schema.Location import Location
 class Station(BaseModel):
     
     station_uuid: int
