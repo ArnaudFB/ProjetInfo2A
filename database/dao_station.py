@@ -111,7 +111,7 @@ class DAOStation(metaclass=Singleton):
         return f"unable to find a station's bikes number with UUID = {uuid}" 
     
     
-    def updateStation(self, station: Station):
+    def update_station(self, station: Station):
         
         updated = False
         
