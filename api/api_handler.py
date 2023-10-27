@@ -32,13 +32,15 @@ async def getNearestStation(user_location: str = Query(Location(**{'lon':48.8563
 
 @app.get("/fonctionnalite-3/")    
 async def getFreqArr(date_debut : datetime, date_fin : datetime):
-    
-    groupby_arr = DAORecord.getVargroupArrByDate(date_debut,date_fin)
-    
-    arrondissement_plus_frequente = max(groupby_arr, key=lambda x:x[1])[0]
+        
+    arrondissement_plus_frequente = DAORecord.get_max_frequentation_arrondissement(date_debut,date_fin)
     
     f"La station la plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
     
+
+
+
+
 
 if __name__ == "__main__":
     print("Starting server")
