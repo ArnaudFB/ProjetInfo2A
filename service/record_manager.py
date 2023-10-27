@@ -1,4 +1,4 @@
-from database.DAORecord import DAORecord
+from database.dao_record import DAORecord
 
 class RecordManager():
     #need to see how to compute the min (mean, numbers of Records etc... )
