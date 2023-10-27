@@ -1,6 +1,6 @@
 
-from schema.record import Record
-from schema.location import Location
+from schema.Record import Record
+from schema.Location import Location
 from pydantic import BaseModel, field_validator
 class Station(BaseModel):
     

@@ -5,7 +5,13 @@ import uvicorn
 import json
 import httpx
 from schema.Location import Location
+
 from service.station_manager import StationManager
+
+from database.dao_record import DAORecord
+from service.station_manager import StationManager
+from datetime import datetime
+
 
 
 # Creating API
@@ -26,6 +32,16 @@ async def get_nearest_station(user_location: str = Query(Location(**{'lon':48.85
     station = StationManager.get_nearest_station(station, user_location)
     
     return f"The nearest station to your location is the station : {station}"
+
+
+@app.get("/fonctionnalite-3/")    
+async def getFreqArr(date_debut : datetime, date_fin : datetime):
+    
+    groupby_arr = DAORecord.getVargroupArrByDate(date_debut,date_fin)
+    
+    arrondissement_plus_frequente = max(groupby_arr, key=lambda x:x[1])[0]
+    
+    f"La station la plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
     
 
 if __name__ == "__main__":

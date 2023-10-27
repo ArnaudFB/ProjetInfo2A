@@ -1,7 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 from datetime import datetime
-from utils.singleton import Singleton
+from utils.Singleton import Singleton
 
 
 class Database(metaclass=Singleton):  
