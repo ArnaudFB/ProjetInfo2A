@@ -7,7 +7,7 @@ class TestDAOStation(unittest.TestCase):
 
     def setUp(self):
         # Initialisation des objets nécessaires aux tests
-        self.station = Station.Station(123, 'Station A', Location(10.0, 20.0))
+        self.station = station.Station(123, 'Station A', Location(10.0, 20.0))
         self.existing_uuid = 16107
 
     def test_add_new_station(self):
@@ -66,7 +66,7 @@ class TestDAOStation(unittest.TestCase):
         self.assertEqual(result, 16)
 
     def test_get_station_arr_byuuid_non_existing_station(self):
-        dao_station = DAOStation()
+        dao_station = dao_station()
         dao_station.execute = MagicMock(return_value=None)  
 
         with self.assertRaises(Exception) as context:

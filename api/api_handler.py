@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request, Query
 import uvicorn
 import json
 import httpx
-from data.Location import Location
+from schema.Location import Location
 from service.StationManager import StationManager
 
 
@@ -12,7 +12,7 @@ from service.StationManager import StationManager
 app = FastAPI()
 
 @app.get("/fonctionnalite-1/")    
-async def getNearestStation(user_location: str = Query((48.8563199, 2.31345367))):
+async def getNearestStation(user_location: str = Query(Location(**{'lon':48.8563199, 'lat':2.31345367}))):
     
     user_location = tuple(map(float, user_location.split(',')) if ',' in user_location else (48.8563199, 2.31345367))
 
