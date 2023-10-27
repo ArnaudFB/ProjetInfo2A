@@ -122,7 +122,7 @@ class DAOStation(metaclass=Singleton):
                                                     lon = %(lon)s,
                                                     lat = %(lat)s,
                                                     WHERE uuid = %(uuid)s"""
-            cursor.execute(sqlGetStationLoc, {"nom": station.getStationName,
+            cursor.execute(sqlUpdateStation, {"nom": station.getStationName,
                                                 "arrondissement": station.getStationArr,
                                                 "nbvelo": station.getStationNumBikes,
                                                 "lon": station.getStationLon,
