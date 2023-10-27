@@ -1,14 +1,14 @@
 import unittest
 from unittest.mock import MagicMock
-from database import DAORecord
-from data import Record
+from database import dao_record
+from data import record
 
 
 class TestDAORecord(unittest.TestCase):
 
     def setUp(self):
-        self.record = Record.Record(123, 5, 7)
-        self.self.dao_record = DAORecord()
+        self.record = record.Record(123, 5, 7)
+        self.self.dao_record = dao_record()
         self.existing_station_uuid = 16107
         self.non_existing_station_uuid = 99999
         self.date_start = datetime.datetime(2023, 10, 28)

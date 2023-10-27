@@ -1,4 +1,4 @@
-from data.date import Date
+from schema.date import Date
 from datetime import datetime
 
 class Record:
