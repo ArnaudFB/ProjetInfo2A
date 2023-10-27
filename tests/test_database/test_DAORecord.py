@@ -108,8 +108,6 @@ class TestDAORecord(unittest.TestCase):
         
         dao_record = DAORecord()
 
-        
-
         result = dao_record.getVarByArrDate(self.existing_arrondissement, self.date_start, self.date_end)
         self.assertIsInstance(result, list)
         self.assertTrue(len(result) > 0)
@@ -117,7 +115,7 @@ class TestDAORecord(unittest.TestCase):
     def test_getVarByArrDate_no_records(self):
 
         dao_record = DAORecord()
-        arrondissement = 999  # Remplacez par un arrondissement qui n'a pas d'enregistrements
+        arrondissement = 999  
 
 
         result = dao_record.getVarByArrDate(arrondissement, self.date_start, self.date_end)
