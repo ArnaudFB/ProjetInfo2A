@@ -3,6 +3,7 @@ from data.Location import Location
 from database.DAOStation import DAOStation
 from vincenty import vincenty
 import httpx
+from database import DAORecord
 
 class StationManager():
     
@@ -65,3 +66,8 @@ class StationManager():
         nearest_station = min(distance)[1]
         return nearest_station
         
+
+    def getMinFrequentation(date_start : datetime, date_end : datetime) -> int :
+        
+        variation= DAORecord.getVargroupSationByDate(date_start, date_end)
+        lessfrequented_station = min(variation, key = lambda t: t[1])[0]
