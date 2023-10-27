@@ -1,7 +1,7 @@
-from schema.station import Station
-from schema.location import Location
-from schema.date import Date
-from schema.record import Record
+from schema.Station import Station
+from schema.Location import Location
+from schema.Date import Date
+from schema.Record import Record
 from database.dao_station import DAOStation
 from database.dao_date import DAODate
 from database.dao_record import DAORecord
@@ -9,7 +9,8 @@ from database.init_db import Database
 from vincenty import vincenty
 from datetime import datetime
 import httpx
-
+import time
+from database import dao_record
 
 
 class StationManager():
@@ -17,7 +18,7 @@ class StationManager():
     def __init__(self, base_url: str):
         self.base_url = base_url
     
-    async def getStations(self):
+    async def get_stations(self):
         # Initialize an HTTP client
         async with httpx.AsyncClient() as client:
             try:
@@ -35,7 +36,7 @@ class StationManager():
             except Exception as e:
                 return {"error": str(e)}  
     
-    def getAvailableStation(data):
+    def get_available_station(data):
         
         data_station = data
         velib_data = []
@@ -59,7 +60,7 @@ class StationManager():
         return {'velibs':velib_data}
         
     
-    def getNearestStation(data, loc) -> int:
+    def get_nearest_station(data, loc) -> int:
         
         data_station = data
         distance = []
@@ -73,7 +74,7 @@ class StationManager():
         return nearest_station
     
         
-    def fillTables(data):
+    def fill_tables(data):
         
         data_station = data
         
@@ -98,11 +99,11 @@ class StationManager():
             }
             new_date = Date({**new_record_date})
             
-            DAOStation.addNewStation(station=new_station)
-            DAODate.addNewDate(date=new_date)
+            DAOStation.add_new_station(station=new_station)
+            DAODate.add_new_date(date=new_date)
     
     
-    def refreshStationEveryMinute(data):
+    def refresh_station_every_minute(data):
         
         data_station = data
         
@@ -124,16 +125,17 @@ class StationManager():
                 update_station = Station({**new_record})
                     
                 try:
-                    previous_num_bikes=DAOStation.getStationNumBikesByUUID(uuid=station_id)
-                    DAOStation.updateStation(station=update_station)
-                    actual_num_bikes=DAOStation.getStationNumBikesByUUID(uuid=station_id)
-                    DAODate.addNewDate(date=Date(datetime.now().replace(second=0, microsecond=0)))
+                    previous_num_bikes=DAOStation.get_station_numbikes_byuuid(uuid=station_id)
+                    DAOStation.update_station(station=update_station)
+                    actual_num_bikes=DAOStation.get_station_numbikes_byuuid(uuid=station_id)
+                    DAODate.add_new_date(date=Date(datetime.now().replace(second=0, microsecond=0)))
                     if abs(actual_num_bikes-previous_num_bikes)>0:
                         variation=abs(actual_num_bikes-previous_num_bikes)
-                        date_uuid=DAODate.getUUIDByDate(date=datetime.now().replace(second=0, microsecond=0))
+                        date_uuid=DAODate.get_uuid_bydate(date=datetime.now().replace(second=0, microsecond=0))
                         new_record = Record(station_uuid=station_id, date_uuid=date_uuid, variation=variation)
-                        DAORecord.addNewRecord(record=new_record)
+                        DAORecord.add_new_record(record=new_record)
                 finally:
                     connection.close()
                 
             time.sleep(60)
+

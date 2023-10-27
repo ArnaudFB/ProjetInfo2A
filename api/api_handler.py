@@ -7,6 +7,14 @@ import httpx
 from schema.location import Location
 from schema.station import Station
 from service.station_manager import StationManager
+from schema.Location import Location
+
+from service.station_manager import StationManager
+
+from database.dao_record import DAORecord
+from service.station_manager import StationManager
+from datetime import datetime
+
 
 
 # Creating API
@@ -22,12 +30,54 @@ async def getNearestStation(user_location: str = Query(Location(**{'lon':48.8563
     
     station = await StationManager(BASE_URL).getStations()
     
-    station = StationManager.getAvailableStation(station)
+    station = StationManager.get_available_station(station)
     
     station = StationManager.getNearestStation(station, user_location)
-
+    
     return f"The nearest station to your location is the station : {Station(**station)}"
     
+
+
+@app.get("/fonctionnalite-2/")    
+async def getLeastFreqStat(date_debut : datetime, date_fin : datetime):
+
+    station_moins_frequente=DAORecord.get_min_frequentation_station(date_debut,date_fin)
+     
+    
+    return f"La station la moins fréquentée entre {date_debut} et {date_fin} : {station_moins_frequente}"
+
+
+
+@app.get("/fonctionnalite-3/")    
+async def getFreqArr(date_debut : datetime, date_fin : datetime):
+        
+    arrondissement_plus_frequente = DAORecord.get_max_frequentation_arrondissement(date_debut,date_fin)
+    
+    return f"L'arrandissement le plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
+    
+
+
+
+
+@app.get("/fonctionnalite-2/")    
+async def getLeastFreqStat(date_debut : datetime, date_fin : datetime):
+
+    station_moins_frequente=DAORecord.get_min_frequentation_station(date_debut,date_fin)
+     
+    
+    return f"La station la moins fréquentée entre {date_debut} et {date_fin} : {station_moins_frequente}"
+
+
+
+@app.get("/fonctionnalite-3/")    
+async def getFreqArr(date_debut : datetime, date_fin : datetime):
+        
+    arrondissement_plus_frequente = DAORecord.get_max_frequentation_arrondissement(date_debut,date_fin)
+    
+    return f"L'arrandissement le plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
+    
+
+
 
 if __name__ == "__main__":
     print("Starting server")

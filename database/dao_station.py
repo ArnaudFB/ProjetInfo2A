@@ -16,7 +16,7 @@ class DAOStation(metaclass=Singleton):
             cursor.execute(sqlGetAllStation)
             res = cursor.fetchall()
         
-        return
+        return 
     
     # Create method to create a new Station in the database
     def add_new_station(self, station: Station) -> bool:
@@ -96,7 +96,7 @@ class DAOStation(metaclass=Singleton):
             return station_loc
         return f"unable to find a station arrondissement with UUID = {uuid}" 
     
-    # Get method to retrieve Station's bikes available by it's UUID
+    # Get method to retrieve Station's bikes available by its UUID
     def get_station_numbikes_byuuid(self, uuid: int):
         
         with Database.getConnection as connection:
@@ -110,7 +110,7 @@ class DAOStation(metaclass=Singleton):
         return f"unable to find a station's bikes number with UUID = {uuid}" 
     
     
-    def updateStation(self, station: Station):
+    def update_station(self, station: Station):
         
         updated = False
         
@@ -122,7 +122,7 @@ class DAOStation(metaclass=Singleton):
                                                     lon = %(lon)s,
                                                     lat = %(lat)s,
                                                     WHERE uuid = %(uuid)s"""
-            cursor.execute(sqlGetStationLoc, {"nom": station.getStationName,
+            cursor.execute(sqlUpdateStation, {"nom": station.getStationName,
                                                 "arrondissement": station.getStationArr,
                                                 "nbvelo": station.getStationNumBikes,
                                                 "lon": station.getStationLon,
