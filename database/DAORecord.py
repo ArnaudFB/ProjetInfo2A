@@ -2,8 +2,8 @@ from utils.Singleton import Singleton
 from database.init_db import Database
 from data.Record import Record
 import sqlite3
+from datetime import datetime 
 
-# TODO : Change first method to connect to the correct table and extract expected values
 
 class DAORecord(metaclass=Singleton):
     
@@ -13,25 +13,97 @@ class DAORecord(metaclass=Singleton):
             
         with Database.getConnection as connection:
             cursor = connection.cursor()
-            sqlAddStation = """INSERT INTO Station (stationid, stationname, lon, lat)
-                            VALUES (%(uuid)s, %(name)s, %(lon)s, %(lat)s)"""
-            cursor.execute(sqlAddStation, {"uuid": station.getStationID,
-                                    "name": station.getStationName,
-                                    "lon": station.getStationLon,
-                                    "lat": station.getStationLat})
+            sqlAddStation = """INSERT INTO Record (station_uuid, date_uuid, variation )
+                            VALUES (%(station_uuid)s, %(date_uuid)s, %(variation)s)"""
+            cursor.execute(sqlAddStation, {"station_uuid": record.getStationUuid,
+                                    "date_uuid": record.getDateUuid,
+                                    "variation": record.getVariation,
+                                    })
             res = cursor.fetchone()
         if res:
             return not(created)
         return created
     
-    def getRecordByUUID(self, uuid: int) -> Record:
+    def getVarByStationDate(self, station_uuid: int, date_start : datetime, date_end : datetime) -> list[int]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
-            sqlGetRecord = "SELECT record FROM Station WHERE uuid = %(uuid)s"
-            cursor.execute(sqlGetRecord, {"uuid": uuid})
-            res = cursor.fetchone()
+            sqlGetRecord = """SELECT variation FROM Record 
+                            INNER JOIN Date on uuid=date_uuid 
+                            WHERE (station_uuid = %(station_uuid)s)
+                            AND (date_minute>= %(date_start)s) 
+                            AND (date_minute<= %(date_end)s)  """
+            cursor.execute(sqlGetRecord, {"station_uuid": station_uuid,
+                                        "date_start": date_start,
+                                        "date_end": date_end})
+            res = cursor.fetchall()
         if res:
-            record = res['record']
-            return record
-        return f"unable to find a record with UUID = {uuid}"
+            records=[]
+            for r in range(len(res)): 
+                record = res[r]['variation']
+                records.append(record)
+            return records
+        return f"unable to find a record for station {station_uuid} between {date_start} and {date_end}"
+
+    def getVargroupSationByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
+        
+        with Database.getConnection as connection:
+            cursor = connection.cursor()
+            sqlGetRecord = """SELECT station_uuid, sum(variation) FROM Record 
+                            INNER JOIN Date on uuid=date_uuid 
+                            WHERE (date_minute>= %(date_start)s) 
+                            AND (date_minute<= %(date_end)s)
+                            GROUP BY station_uuid  """
+            cursor.execute(sqlGetRecord, {"date_start": date_start,
+                                        "date_end": date_end})
+            res = cursor.fetchall()
+        if res:
+            records=[]
+            for r in range(len(res)): 
+                record = res[r]['station_uuid'],res[r]['sum(variation)']
+                records.append(record)
+            return records
+        return f"unable to find a record between {date_start} and {date_end}"
+
+    def getVarByArrDate(self, arrondissement : int , date_start : datetime, date_end : datetime) -> list[tuple]:
+        
+        with Database.getConnection as connection:
+            cursor = connection.cursor()
+            sqlGetRecord = """SELECT variation FROM Record r
+                            INNER JOIN Date d on d.uuid=r.date_uuid
+                            INNER JOIN Station s on s.uuid=r.station_uuid 
+                            WHERE (s.arrondissement=%(arrondissement)s )
+                            AND(date_minute>= %(date_start)s) 
+                            AND (date_minute<= %(date_end)s)  """
+            cursor.execute(sqlGetRecord, {"arrondissement": arrondissement, 
+                                        "date_start": date_start,
+                                        "date_end": date_end})
+            res = cursor.fetchall()
+        if res:
+            records=[]
+            for r in range(len(res)): 
+                record = res[r]['variation']
+                records.append(record)
+            return records
+        return f"unable to find a record between {date_start} and {date_end} in arrondissement {arrondissement}"
+
+    def getVargroupArrByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
+        
+        with Database.getConnection as connection:
+            cursor = connection.cursor()
+            sqlGetRecord = """SELECT arrondissement, sum(variation) FROM Record r
+                            INNER JOIN Date d on d.uuid=r.date_uuid
+                            INNER JOIN Station s on s.uuid=r.station_uuid 
+                            WHERE (date_minute>= %(date_start)s) 
+                            AND (date_minute<= %(date_end)s)
+                            GROUP BY arrondissement  """
+            cursor.execute(sqlGetRecord, {"date_start": date_start,
+                                        "date_end": date_end})
+            res = cursor.fetchall()
+        if res:
+            records=[]
+            for r in range(len(res)): 
+                record = res[r]['arrondissement'],res[r]['sum(variation)']
+                records.append(record)
+            return records
+        return f"unable to find a record between {date_start} and {date_end}"

@@ -1,22 +1,31 @@
 from data.Date import Date
 from datetime import datetime
+
 class Record:
 
-    def __init__(self, timestamp: Date, availablebikes: int):
-        if availablebikes < 0:
-            raise ValueError("Number of bikes available cannot be negative !")
-        if timestamp > datetime.now():
-            raise ValueError("Datetime can't be in the future !")
+    def __init__(self, station_uuid: int, date_uuid: int, variation: int):
+        if variation< 0:
+            raise ValueError("Variation must be positive !")
+        if not(isinstance(station_uuid,int)) or not(isinstance(station_uuid,int)) :
+            raise TypeError("uuid must be integers")
+
         else:
-            self._timestamp = timestamp
-            self._availablebikes = availablebikes
+            self.station_uuid = station_uuid
+            self.date_uuid = date_uuid
+            self.variation = variation
+  
             
     @property
-    def getAvailablebikes(self) -> int:
-        return self._availablebikes
-    
+    def getStationUuid(self) -> int:
+        return self.station_uuid
+
     @property
-    def getTimestamp(self) -> Date:
-        return self._timestamp
+    def getDateUuid(self) -> int:
+        return self.date_uuid
+
+    @property
+    def getVariation(self) -> int:
+        return self.variation
+
     
     

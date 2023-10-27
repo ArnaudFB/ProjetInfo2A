@@ -2,14 +2,15 @@ from data.Record import Record
 from data.Location import Location
 class Station:
     
-    def __init__(self, station_id: int, station_name: str, loc: Location, history: list[Record]):
+    def __init__(self, station_id: int,station_name: str, loc: Location, numbikes: int):
         self._stationId = station_id
         self._stationName = station_name
         self.__loc = loc
-        self._history = []
-        for record in history :
-            if isinstance(record , Record):
-                self._history += [record]
+        self.__numbikes = numbikes
+        station_arr = station_id[:-3]
+        if station_arr > 20:
+            self._stationArr = 0
+        self._stationArr = station_arr
                     
     @property
     def getStationID(self) -> int:
@@ -20,12 +21,12 @@ class Station:
         return self._stationName
     
     @property
-    def getStationCoordinates(self) -> tuple[float]:
-        return self.__loc.getLocation
+    def getStationNumBikes(self) -> int:
+        return self.__numbikes
     
     @property
-    def getStationHistory(self) -> list[Record]:
-        return self._history
+    def getStationCoordinates(self) -> tuple[float]:
+        return self.__loc.getLocation
     
     @property
     def getStationLon(self) -> float:
@@ -35,4 +36,7 @@ class Station:
     def getStationLat(self) -> float:
         return self.__loc.getLatitude
     
+    @property
+    def getStationArr(self) -> int:
+        return self._stationArr
     

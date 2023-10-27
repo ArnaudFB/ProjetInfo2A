@@ -1,8 +1,15 @@
 from data.Station import Station
 from data.Location import Location
+from data.Date import Date
+from data.Record import Record
 from database.DAOStation import DAOStation
+from database.DAODate import DAODate
+from database.DAORecord import DAORecord
+from database.init_db import Database
 from vincenty import vincenty
+from datetime import datetime
 import httpx
+
 
 class StationManager():
     
@@ -64,5 +71,69 @@ class StationManager():
         
         nearest_station = min(distance)[1]
         return nearest_station
+    
         
+    def fillTables(data):
         
+        data_station = data
+        
+        for records in data_station:
+            station_id=records['stationcode']
+            station_name=records['name']
+            lat=float((records['coordonnees_geo']['lat']))
+            lon=float((records['coordonnees_geo']['lon']))
+            nbvelo=records['numbikesavailable']
+            station_loc=Location(lon=lon, lat=lat)
+            
+            new_record_station={
+                    'station_name':station_name,
+                    'station_id':station_id,
+                    'loc':station_loc,
+                    'numbikes':nbvelo
+                    },
+            new_station = Station({**new_record_station})
+            
+            new_record_date={
+                'date_minute': datetime.now().replace(second=0, microsecond=0)
+            }
+            new_date = Date({**new_record_date})
+            
+            DAOStation.addNewStation(station=new_station)
+            DAODate.addNewDate(date=new_date)
+    
+    
+    def refreshStationEveryMinute(data):
+        
+        data_station = data
+        
+        while True:
+        
+            for records in data_station:
+                station_id=records['stationcode']
+                station_name=records['name']
+                lat=float((records['coordonnees_geo']['lat']))
+                lon=float((records['coordonnees_geo']['lon']))
+                station_loc=Location(lat=lat, lon=lon)
+                nbvelo=records['numbikesavailable']
+                new_record={
+                        'station_name':station_name,
+                        'station_id':station_id,
+                        'loc':station_loc,
+                        'numbikes':nbvelo
+                        },
+                update_station = Station({**new_record})
+                    
+                try:
+                    previous_num_bikes=DAOStation.getStationNumBikesByUUID(uuid=station_id)
+                    DAOStation.updateStation(station=update_station)
+                    actual_num_bikes=DAOStation.getStationNumBikesByUUID(uuid=station_id)
+                    DAODate.addNewDate(date=Date(datetime.now().replace(second=0, microsecond=0)))
+                    if abs(actual_num_bikes-previous_num_bikes)>0:
+                        variation=abs(actual_num_bikes-previous_num_bikes)
+                        date_uuid=DAODate.getUUIDByDate(date=datetime.now().replace(second=0, microsecond=0))
+                        new_record = Record(station_uuid=station_id, date_uuid=date_uuid, variation=variation)
+                        DAORecord.addNewRecord(record=new_record)
+                finally:
+                    connection.close()
+                
+            time.sleep(60)

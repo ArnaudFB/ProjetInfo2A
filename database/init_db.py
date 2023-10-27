@@ -1,6 +1,8 @@
 import sqlite3
 from sqlite3 import Error
+from datetime import datetime
 from utils.Singleton import Singleton
+
 
 class Database(metaclass=Singleton):  
     
@@ -15,14 +17,16 @@ class Database(metaclass=Singleton):
         # Create the Station table
         initialize_station_request = """CREATE TABLE IF NOT EXISTS Station (
             uuid INT PRIMARY KEY,
+            arrondissement INT,
             nom TEXT,
+            nbvelo INT,
             lon NUMERIC(10, 6),
             lat NUMERIC(10, 6)
         );"""
 
         # Create the Date table
         initialize_date_request = """CREATE TABLE IF NOT EXISTS Date (
-            uuid INT PRIMARY KEY,
+            uuid INT PRIMARY KEY AUTO INCREMENT,
             date_minute DATETIME
         );"""
 
