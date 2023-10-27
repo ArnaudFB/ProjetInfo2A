@@ -34,15 +34,24 @@ async def get_nearest_station(user_location: str = Query(Location(**{'lon':48.85
     return f"The nearest station to your location is the station : {station}"
 
 
+
+@app.get("/fonctionnalite-2/")    
+async def getLeastFreqStat(date_debut : datetime, date_fin : datetime):
+
+    station_moins_frequente=DAORecord.get_min_frequentation_station(date_debut,date_fin)
+     
+    
+    return f"La station la moins fréquentée entre {date_debut} et {date_fin} : {station_moins_frequente}"
+
+
+
 @app.get("/fonctionnalite-3/")    
 async def getFreqArr(date_debut : datetime, date_fin : datetime):
         
     arrondissement_plus_frequente = DAORecord.get_max_frequentation_arrondissement(date_debut,date_fin)
     
-    return f"La station la plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
+    return f"L'arrandissement le plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
     
-
-
 
 
 
