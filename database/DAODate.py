@@ -3,7 +3,7 @@ from utils.Singleton import Singleton
 from data.Date import Date
 import sqlite3
 
-class DAOStation(metaclass=Singleton):
+class DAODate(metaclass=Singleton):
     
     # Create method to add a new date to the database
     def addNewDate(self, date: Date) -> bool:
@@ -14,7 +14,7 @@ class DAOStation(metaclass=Singleton):
             cursor = connection.cursor()
             sqlAddDate = """INSERT INTO Date (date_minute)
                             VALUES (%(date_minute)s)"""
-            cursor.execute(sqlAddDate, {"name": Date.getDate})
+            cursor.execute(sqlAddDate, {"name": Date.getDate()})
             res = cursor.fetchone()
         if res:
             return not(created)
@@ -29,7 +29,18 @@ class DAOStation(metaclass=Singleton):
             cursor.execute(sqlGetDate, {"uuid": uuid}) 
             res = cursor.fetchone()
         if res:
-            record = res['record']
+            record = res['date_minute']
             return record
-        return f"unable to find a record with UUID = {uuid}"   
+        return f"unable to find a date with UUID = {uuid}"   
     
+    def getUUIDByDate(self, date: Date) -> int:
+        
+        with Database.getConnection as connection:
+            cursor = connection.cursor()
+            sqlGetUUID = "SELECT uuid FROM Date WHERE date_minute = %(date_minute)s"
+            cursor.execute(sqlGetUUID, {"date_minute": date})
+            res = cursor.fetchone()
+        if res:
+            record = res['uuid']
+            return record
+        return f"Unable to find a UUID with date = {date}"
