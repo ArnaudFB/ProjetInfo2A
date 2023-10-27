@@ -7,7 +7,7 @@ from datetime import datetime
 
 class DAORecord(metaclass=Singleton):
     
-    def addNewRecord(self, record: Record) -> bool:
+    def add_new_record(self, record: Record) -> bool:
         
         created = False
             
@@ -24,7 +24,7 @@ class DAORecord(metaclass=Singleton):
             return not(created)
         return created
     
-    def getVarByStationDate(self, station_uuid: int, date_start : datetime, date_end : datetime) -> list[int]:
+    def get_var_bystation_date_existing_station(self, station_uuid: int, date_start : datetime, date_end : datetime) -> list[int]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -45,7 +45,7 @@ class DAORecord(metaclass=Singleton):
             return records
         return f"unable to find a record for station {station_uuid} between {date_start} and {date_end}"
 
-    def getVargroupSationByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
+    def get_var_groupstation_bydate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -65,7 +65,7 @@ class DAORecord(metaclass=Singleton):
             return records
         return f"unable to find a record between {date_start} and {date_end}"
 
-    def getVarByArrDate(self, arrondissement : int , date_start : datetime, date_end : datetime) -> list[tuple]:
+    def get_var_byarr_date(self, arrondissement : int , date_start : datetime, date_end : datetime) -> list[tuple]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -87,7 +87,7 @@ class DAORecord(metaclass=Singleton):
             return records
         return f"unable to find a record between {date_start} and {date_end} in arrondissement {arrondissement}"
 
-    def getVargroupArrByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
+    def get_var_grouparr_bydate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()

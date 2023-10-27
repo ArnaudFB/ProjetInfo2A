@@ -10,7 +10,7 @@ class TestDAOStation(unittest.TestCase):
         self.station = Station.Station(123, 'Station A', Location(10.0, 20.0))
         self.existing_uuid = 16107
 
-    def test_addNewStation(self):
+    def test_add_new_station(self):
  
         dao_station = DAOStation()
         dao_station.execute = MagicMock(return_value={'stationid': 123})
@@ -21,7 +21,7 @@ class TestDAOStation(unittest.TestCase):
         self.assertTrue(created)
 
    
-    def test_addNewStation_error(self):
+    def test_add_new_station_error(self):
     
         dao_station = DAOStation()
         dao_station.getConnection = MagicMock(side_effect=Exception("Database connection error"))
@@ -33,7 +33,7 @@ class TestDAOStation(unittest.TestCase):
         self.assertEqual(str(context.exception), "Database connection error")
 
 
-    def test_getStationByUUID(self):
+    def test_get_station_byuuid(self):
         #GIVEN
         dao_station = DAOStation()
         dao_station.execute = MagicMock(return_value={'uuid': 12563, 'nom': 'Station A', 'lon': 10.0, 'lat': 20.0})
@@ -48,7 +48,7 @@ class TestDAOStation(unittest.TestCase):
         self.assertEqual(result.getStationLocation().getLongitude(), 10.0)
         self.assertEqual(result.getStationLocation().getLatitude(), 20.0)
 
-    def test_nonexistant_getStationbyUUID(self): 
+    def test_nonexistant_get_station_byuuid(self): 
         dao_station = DAOStation()
         dao_station.execute = MagicMock(return_value=None)  
 
@@ -58,14 +58,14 @@ class TestDAOStation(unittest.TestCase):
         self.assertEqual(str(context.exception), "unable to find a station name with UUID = nonexistent_uuid")
 
 
-    def test_getStationArrByUUID_existing_station(self):
+    def test_get_station_arr_byuuid_existing_station(self):
         # Test avec une station existante
         dao_station = DAOStation()
 
         result =dao_station.getStationArrByUUID(self.existing_uuid)
         self.assertEqual(result, 16)
 
-    def test_getStationArrByUUID_non_existing_station(self):
+    def test_get_station_arr_byuuid_non_existing_station(self):
         dao_station = DAOStation()
         dao_station.execute = MagicMock(return_value=None)  
 
@@ -74,12 +74,12 @@ class TestDAOStation(unittest.TestCase):
 
         self.assertEqual(result, f"unable to find a station arrondissement with UUID = nonexistent_uuid ")
 
-    def test_getStationLocByUUID_existing_station(self):
+    def test_get_station_loc_byuuid_existing_station(self):
         dao_station = DAOStation()
         result = dao_station.getStationLocByUUID(self.existing_uuid)
         self.assertEqual(result, (48.865983, 2.275725))  
 
-    def test_getStationLocByUUID_non_existing_station(self):
+    def test_get_station_loc_byuuid_non_existing_station(self):
         # Test avec une station inexistante
         dao_station = DAOStation()
         dao_station.execute = MagicMock(return_value=None)  
