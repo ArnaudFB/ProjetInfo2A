@@ -6,7 +6,11 @@ class RecordManager():
         
         variation= DAORecord.getVargroupSationByDate(date_start, date_end)
         lessfrequented_station = min(variation, key = lambda t: t[1])[0]
+        return lessfrequented_station
 
     def getMaxFrequentationArrondissement(date_start : datetime, date_end : datetime) -> int : 
         variation= DAORecord.getVargroupArrByDate(date_start, date_end)
         lessfrequented_station = max(variation, key = lambda t: t[1])[0]
+        return lessfrequented_station
+    
+    
