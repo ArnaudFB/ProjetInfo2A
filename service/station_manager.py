@@ -100,8 +100,8 @@ class StationManager():
             }
             new_date = Date({**new_record_date})
             
-            DAOStation.addNewStation(station=new_station)
-            DAODate.addNewDate(date=new_date)
+            DAOStation.add_new_station(station=new_station)
+            DAODate.add_new_date(date=new_date)
     
     
     def refresh_station_every_minute(data):
@@ -126,15 +126,15 @@ class StationManager():
                 update_station = Station({**new_record})
                     
                 try:
-                    previous_num_bikes=DAOStation.getStationNumBikesByUUID(uuid=station_id)
-                    DAOStation.updateStation(station=update_station)
-                    actual_num_bikes=DAOStation.getStationNumBikesByUUID(uuid=station_id)
-                    DAODate.addNewDate(date=Date(datetime.now().replace(second=0, microsecond=0)))
+                    previous_num_bikes=DAOStation.get_station_numbikes_byuuid(uuid=station_id)
+                    DAOStation.update_station(station=update_station)
+                    actual_num_bikes=DAOStation.get_station_numbikes_byuuid(uuid=station_id)
+                    DAODate.add_new_date(date=Date(datetime.now().replace(second=0, microsecond=0)))
                     if abs(actual_num_bikes-previous_num_bikes)>0:
                         variation=abs(actual_num_bikes-previous_num_bikes)
-                        date_uuid=DAODate.getUUIDByDate(date=datetime.now().replace(second=0, microsecond=0))
+                        date_uuid=DAODate.get_uuid_bydate(date=datetime.now().replace(second=0, microsecond=0))
                         new_record = Record(station_uuid=station_id, date_uuid=date_uuid, variation=variation)
-                        DAORecord.addNewRecord(record=new_record)
+                        DAORecord.add_new_record(record=new_record)
                 finally:
                     connection.close()
                 

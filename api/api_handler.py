@@ -5,16 +5,20 @@ import uvicorn
 import json
 import httpx
 from schema.Location import Location
+
+from service.station_manager import StationManager
+
 from database.dao_record import DAORecord
 from service.station_manager import StationManager
 from datetime import datetime
+
 
 
 # Creating API
 app = FastAPI()
 
 @app.get("/fonctionnalite-1/")    
-async def getNearestStation(user_location: str = Query(Location(**{'lon':48.8563199, 'lat':2.31345367}))):
+async def get_nearest_station(user_location: str = Query(Location(**{'lon':48.8563199, 'lat':2.31345367}))):
     
     user_location = tuple(map(float, user_location.split(',')) if ',' in user_location else (48.8563199, 2.31345367))
 
@@ -23,9 +27,9 @@ async def getNearestStation(user_location: str = Query(Location(**{'lon':48.8563
     
     station = await StationManager(BASE_URL).getStations()
     
-    station = StationManager.getAvailableStation(station)
+    station = StationManager.get_available_station(station)
     
-    station = StationManager.getNearestStation(station, user_location)
+    station = StationManager.get_nearest_station(station, user_location)
     
     return f"The nearest station to your location is the station : {station}"
 
