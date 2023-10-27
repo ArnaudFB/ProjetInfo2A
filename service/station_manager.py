@@ -9,15 +9,15 @@ from database.init_db import Database
 from vincenty import vincenty
 from datetime import datetime
 import httpx
-
 from database import DAORecord
+
 
 class StationManager():
     
     def __init__(self, base_url: str):
         self.base_url = base_url
     
-    async def get_stations(self):
+    async def getStations(self):
         # Initialize an HTTP client
         async with httpx.AsyncClient() as client:
             try:
@@ -35,7 +35,7 @@ class StationManager():
             except Exception as e:
                 return {"error": str(e)}  
     
-    def get_available_station(data):
+    def getAvailableStation(data):
         
         data_station = data
         velib_data = []
@@ -60,7 +60,7 @@ class StationManager():
         return {'velibs':velib_data}
         
     
-    def get_nearest_station(data, loc) -> int:
+    def getNearestStation(data, loc) -> int:
         
         data_station = data
         distance = []
@@ -74,7 +74,7 @@ class StationManager():
         return nearest_station
     
         
-    def fill_tables(data):
+    def fillTables(data):
         
         data_station = data
         
@@ -103,7 +103,7 @@ class StationManager():
             DAODate.addNewDate(date=new_date)
     
     
-    def refresh_station_every_minute(data):
+    def refreshStationEveryMinute(data):
         
         data_station = data
         
@@ -138,3 +138,10 @@ class StationManager():
                     connection.close()
                 
             time.sleep(60)
+
+
+    def getMinFrequentation(date_start : datetime, date_end : datetime) -> int :
+        
+        variation= DAORecord.getVargroupSationByDate(date_start, date_end)
+        lessfrequented_station = min(variation, key = lambda t: t[1])[0]
+

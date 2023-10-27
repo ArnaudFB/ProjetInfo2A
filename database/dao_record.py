@@ -1,6 +1,7 @@
 from utils.singleton import Singleton
 from database.init_db import Database
 from schema.record import Record
+
 import sqlite3
 from datetime import datetime 
 
