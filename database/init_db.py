@@ -17,13 +17,14 @@ class Database(metaclass=Singleton):
             uuid INT PRIMARY KEY,
             arrondissement INT,
             nom TEXT,
+            nbvelo INT,
             lon NUMERIC(10, 6),
             lat NUMERIC(10, 6)
         );"""
 
         # Create the Date table
         initialize_date_request = """CREATE TABLE IF NOT EXISTS Date (
-            uuid INT PRIMARY KEY,
+            uuid INT PRIMARY KEY AUTO INCREMENT,
             date_minute DATETIME
         );"""
 
@@ -53,3 +54,23 @@ class Database(metaclass=Singleton):
         finally:
             print ("Closing Connections ... ")
     
+    
+    def fillTables(data):
+        
+        data_station = data
+        
+        for records in data_station:
+            station_id=records['stationcode']
+            station_name=records['name']
+            lat=float((records['coordonnees_geo']['lat']))
+            lon=float((records['coordonnees_geo']['lon']))
+            nbvelo=records['numbikesavailable']
+            new_record={
+                'station': {
+                    'name':station_name,
+                    'uuid':station_id,
+                    'latitude':lat,
+                    'longitude':lon,
+                    },
+                }
+            station = Station({**new_record})

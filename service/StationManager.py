@@ -1,8 +1,14 @@
 from data.Station import Station
 from data.Location import Location
+from data.Date import Date
+from data.Record import Record
 from database.DAOStation import DAOStation
+from database.DAODate import DAODate
+from database.init_db import Database
 from vincenty import vincenty
+from datetime import datetime
 import httpx
+
 
 class StationManager():
     
@@ -64,4 +70,71 @@ class StationManager():
         
         nearest_station = min(distance)[1]
         return nearest_station
+    
         
+    def refreshStationEveryMinute(data):
+        
+        data_station = data
+        
+        while True:
+        
+            for records in data_station:
+                station_id=records['stationcode']
+                station_name=records['name']
+                lat=float((records['coordonnees_geo']['lat']))
+                lon=float((records['coordonnees_geo']['lon']))
+                new_record={
+                    'station': {
+                        'name':station_name,
+                        'uuid':station_id,
+                        'latitude':lat,
+                        'longitude':lon,
+                        },
+                    }
+                station = Station({**new_record})
+                    
+                try:
+                    DAOStation.addNewStation(station=station)
+                finally:
+                    connection.close()
+                
+            time.sleep(60)
+            
+    
+    def refreshRecordEveryMinute(data):
+        
+        data_station = data
+        
+        while True:
+        
+            for records in data_station:
+                station_id=records['stationcode']
+                station_var=records['']
+                new_record={
+                    'station': {
+                        'name':station_name,
+                        'uuid':station_id,
+                        'latitude':lat,
+                        'longitude':lon,
+                        },
+                    }
+                station = Station({**new_record})
+                    
+                try:
+                    DAOStation.addNewStation(station=station)
+                finally:
+                    connection.close()
+                
+            time.sleep(60)
+            
+    
+    def refreshDateEveryMinute():
+        
+        while True:
+            
+            try:
+                DAODate.addNewDate(date=Date(datetime.now))
+            finally:
+                connection.close()
+                
+            time.sleep(60)
