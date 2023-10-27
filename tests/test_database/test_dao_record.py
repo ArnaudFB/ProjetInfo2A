@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from database import dao_record
-from data import record
+from schema import record
 
 
 class TestDAORecord(unittest.TestCase):
