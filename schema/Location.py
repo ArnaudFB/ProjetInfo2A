@@ -1,15 +1,24 @@
-class Location():
+from pydantic import BaseModel, field_validator
+
+class Location(BaseModel):
     
-    def __init__(self, lon: float = 0, lat: float = 0):
-        
-        if (abs(lat)>90 or abs(lon)>180):
-            raise ValueError("Invalid coordinates")
-        
-        if(not(isinstance(lat, float) and isinstance(lon, float))):
-            raise TypeError("Both arguments must be float type")
-        
-        self.lon = lon
-        self.lat = lat
+    lat:float 
+    lon:float
+    
+    @field_validator("lat")
+    def lat_must_be_valid(cls, v):
+        if not(isinstance(v, float)):
+            raise TypeError("latitude must be a float")
+        if abs(v)>90:
+            raise ValueError("latitude should be between -90 and 90")
+            
+            
+    @field_validator("lon")
+    def lat_must_be_valid(cls, v):
+        if not(isinstance(v, float)):
+            raise TypeError("longitude must be a float")
+        if abs(v)>180:
+            raise ValueError("longitude should be between -180 and 180")
     
     @property
     def getLocation(self):

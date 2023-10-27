@@ -1,6 +1,6 @@
 from database.init_db import Database
 from utils.Singleton import Singleton
-from data.Date import Date
+from schema.Date import Date
 import sqlite3
 
 class DAODate(metaclass=Singleton):

@@ -1,7 +1,7 @@
-from data.Station import Station
-from data.Location import Location
-from data.Date import Date
-from data.Record import Record
+from schema.Station import Station
+from schema.Location import Location
+from schema.Date import Date
+from schema.Record import Record
 from database.DAOStation import DAOStation
 from database.DAODate import DAODate
 from database.DAORecord import DAORecord
@@ -76,10 +76,7 @@ class StationManager():
         
     def fillTables(data):
         
-<<<<<<< HEAD
-        data_station = data
-        
-        for records in data_station:
+        for records in data:
             station_id=records['stationcode']
             station_name=records['name']
             lat=float((records['coordonnees_geo']['lat']))
@@ -139,10 +136,3 @@ class StationManager():
                     connection.close()
                 
             time.sleep(60)
-=======
-
-    def getMinFrequentation(date_start : datetime, date_end : datetime) -> int :
-        
-        variation= DAORecord.getVargroupSationByDate(date_start, date_end)
-        lessfrequented_station = min(variation, key = lambda t: t[1])[0]
->>>>>>> 5af5e7391bd129e8a83e7f5e063beb5244710c73

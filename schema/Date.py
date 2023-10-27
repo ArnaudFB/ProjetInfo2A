@@ -1,17 +1,17 @@
+from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
 
-class Date:
+class Date(BaseModel):
     
-    def __init__(self, date: datetime):
-        self.date = date
+    date: datetime = Field(default=datetime.now().replace(second=0, microsecond=0))
+    
+    @field_validator("date")
+    def date_cant_be_in_future(cls, v):
+        if v > datetime.now():
+            raise ValueError("Date can't be in the future.")
+        return v
     
     @property
-    def getDate(self):
+    def get_date(self):
         return self.date
-    
-    def isSuperior(self, date2) -> bool:
-        return (self.date >= date2)
-    
-    def isInferior(self, date2) -> bool:
-        return (self.date <= date2)
     

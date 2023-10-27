@@ -1,7 +1,7 @@
 from database.init_db import Database
 from utils.Singleton import Singleton
-from data.Station import Station
-from data.Location import Location
+from schema.Station import Station
+from schema.Location import Location
 import sqlite3
 
 
