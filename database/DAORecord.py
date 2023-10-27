@@ -24,7 +24,7 @@ class DAORecord(metaclass=Singleton):
             return not(created)
         return created
     
-    def getVarByStationDate(self, station_uuid: int, date_start : datetime.datetime, date_end : datetime.datetime) -> list[int]:
+    def getVarByStationDate(self, station_uuid: int, date_start : datetime, date_end : datetime) -> list[int]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -45,26 +45,27 @@ class DAORecord(metaclass=Singleton):
             return records
         return f"unable to find a record for station {station_uuid} between {date_start} and {date_end}"
 
-    def getVarSationByDate(self, date_start : datetime.datetime, date_end : datetime.datetime) -> list[tuple]:
+    def getVargroupSationByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
-            sqlGetRecord = """SELECT station_uuid, variation FROM Record 
+            sqlGetRecord = """SELECT station_uuid, sum(variation) FROM Record 
                             INNER JOIN Date on uuid=date_uuid 
                             WHERE (date_minute>= %(date_start)s) 
-                            AND (date_minute<= %(date_end)s)  """
+                            AND (date_minute<= %(date_end)s)
+                            GROUP BY station_uuid  """
             cursor.execute(sqlGetRecord, {"date_start": date_start,
                                         "date_end": date_end})
             res = cursor.fetchall()
         if res:
             records=[]
             for r in range(len(res)): 
-                record = res[r]['station_uuid'],res[r]['variation']
+                record = res[r]['station_uuid'],res[r]['sum(variation)']
                 records.append(record)
             return records
         return f"unable to find a record between {date_start} and {date_end}"
 
-    def getVarByArrDate(self, arrondissement : int , date_start : datetime.datetime, date_end : datetime.datetime) -> list[tuple]:
+    def getVarByArrDate(self, arrondissement : int , date_start : datetime, date_end : datetime) -> list[tuple]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -85,3 +86,24 @@ class DAORecord(metaclass=Singleton):
                 records.append(record)
             return records
         return f"unable to find a record between {date_start} and {date_end} in arrondissement {arrondissement}"
+
+        def getVargroupArrByDate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
+        
+        with Database.getConnection as connection:
+            cursor = connection.cursor()
+            sqlGetRecord = """SELECT arrondissement, sum(variation) FROM Record r
+                            INNER JOIN Date d on d.uuid=r.date_uuid
+                            INNER JOIN Station s on s.uuid=r.station_uuid 
+                            WHERE (date_minute>= %(date_start)s) 
+                            AND (date_minute<= %(date_end)s)
+                            GROUP BY arrondissement  """
+            cursor.execute(sqlGetRecord, {"date_start": date_start,
+                                        "date_end": date_end})
+            res = cursor.fetchall()
+        if res:
+            records=[]
+            for r in range(len(res)): 
+                record = res[r]['arrondissement'],res[r]['sum(variation)']
+                records.append(record)
+            return records
+        return f"unable to find a record between {date_start} and {date_end}"
