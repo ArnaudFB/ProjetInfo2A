@@ -9,7 +9,7 @@ from database.init_db import Database
 from vincenty import vincenty
 from datetime import datetime
 import httpx
-from database import DAORecord
+
 
 
 class StationManager():
@@ -48,11 +48,10 @@ class StationManager():
             numbikes=int((records['numbikesavailable']))
             new_record={
                 'station': {
-                    'name':station_name,
-                    'uuid':station_id,
-                    'latitude':lat,
-                    'longitude':lon,
-                    'numbikesavailable':numbikes},
+                    'station_name':station_name,
+                    'station_uuid':station_id,
+                    'loc':Location(**{'lon': lon, 'lat':lat}),
+                    'numbikes':numbikes},
                 }
             if numbikes > 0:
                 velib_data.append({**new_record})
@@ -66,9 +65,9 @@ class StationManager():
         distance = []
         
         for station in data_station["velibs"]:
-            
-            dist = vincenty(loc, (station["station"]["longitude"],station["station"]["latitude"]))
-            distance.append((dist, station["station"]["name"]))
+            station_loc = station["station"]["loc"]
+            dist = vincenty(loc, station_loc)
+            distance.append((dist, station["station"]))
         
         nearest_station = min(distance)[1]
         return nearest_station
@@ -76,7 +75,6 @@ class StationManager():
         
     def fillTables(data):
         
-<<<<<<< HEAD
         data_station = data
         
         for records in data_station:
@@ -139,10 +137,3 @@ class StationManager():
                     connection.close()
                 
             time.sleep(60)
-=======
-
-    def getMinFrequentation(date_start : datetime, date_end : datetime) -> int :
-        
-        variation= DAORecord.getVargroupSationByDate(date_start, date_end)
-        lessfrequented_station = min(variation, key = lambda t: t[1])[0]
->>>>>>> 5af5e7391bd129e8a83e7f5e063beb5244710c73

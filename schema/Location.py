@@ -14,7 +14,7 @@ class Location(BaseModel):
             
             
     @field_validator("lon")
-    def lat_must_be_valid(cls, v):
+    def lon_must_be_valid(cls, v):
         if not(isinstance(v, float)):
             raise TypeError("longitude must be a float")
         if abs(v)>180:
@@ -31,3 +31,4 @@ class Location(BaseModel):
     @property
     def getLongitude(self):
         return self.lon
+
