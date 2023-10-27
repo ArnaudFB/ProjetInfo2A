@@ -11,7 +11,7 @@ class Record:
 
         else:
             self.station_uuid = station_uuid
-            self.dat_uuid = date_uuid
+            self.date_uuid = date_uuid
             self.variation = variation
   
             

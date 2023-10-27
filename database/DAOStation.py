@@ -25,11 +25,12 @@ class DAOStation(metaclass=Singleton):
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
-            sqlAddStation = """INSERT INTO Station (uuid, arrondissement, nom, lon, lat)
-                            VALUES (%(uuid)s,%(arrondissement)s %(name)s, %(lon)s, %(lat)s)"""
+            sqlAddStation = """INSERT INTO Station (uuid, arrondissement, nom, nbvelo, lon, lat)
+                            VALUES (%(uuid)s,%(arrondissement)s %(name)s, %(nbvelo)s, %(lon)s, %(lat)s)"""
             cursor.execute(sqlAddStation, {"uuid": station.getStationID,
                                     "arrondissement": station.getStationArr,
                                     "name": station.getStationName,
+                                    "nbvelo": station.getStationNumBikes,
                                     "lon": station.getStationLon,
                                     "lat": station.getStationLat})
             res = cursor.fetchone()
@@ -38,7 +39,26 @@ class DAOStation(metaclass=Singleton):
         return created
         
     # Get method to retrieve Station by it's UUID
-    def getStationNameByUUID(uuid: int) -> str:
+    def getStationByUUID(self, uuid: int):
+        
+        with Database.getConnection as connection:
+            cursor = connection.cursor()
+            sqlGetStation = "SELECT uuid, nom, nbvelo, lon, lat, arrondissement FROM Station WHERE uuid = %(uuid)s"
+            cursor.execute(sqlGetStation, {"uuid": uuid})
+            res = cursor.fetchone()
+        if res:
+            station_uuid = res['uuid']
+            station_name = res['nom']
+            station_nbvelo = res['nbvelo']
+            station_lon = res['lon']
+            station_lat = res['lat']
+            station_loc = Location(station_lon, station_lat)
+            station = Station(station_uuid, station_name, station_loc, station_nbvelo)
+            return station
+        return f"unable to find a station name with UUID = {uuid}"
+    
+    # Get method to retrieve Station by it's UUID
+    def getStationNameByUUID(self, uuid: int):
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -46,17 +66,12 @@ class DAOStation(metaclass=Singleton):
             cursor.execute(sqlGetStation, {"uuid": uuid})
             res = cursor.fetchone()
         if res:
-            station_uuid = res['uuid']
             station_name = res['nom']
-            station_lon = res['lon']
-            station_lat = res['lat']
-            station_loc = Location(station_lon, station_lat)
-            station = Station(station_uuid, station_name, station_loc)
-            return station
+            return station_name
         return f"unable to find a station name with UUID = {uuid}"
     
     # Get method to retrieve Station's arrondissement by it's UUID
-    def getStationArrByUUID(uuid: int):
+    def getStationArrByUUID(self, uuid: int):
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -69,7 +84,7 @@ class DAOStation(metaclass=Singleton):
         return f"unable to find a station arrondissement with UUID = {uuid}"    
     
     # Get method to retrieve Station's location by it's UUID
-    def getStationLocByUUID(uuid: int):
+    def getStationLocByUUID(self, uuid: int):
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -80,3 +95,40 @@ class DAOStation(metaclass=Singleton):
             station_loc = res['lon'], res['lat']
             return station_loc
         return f"unable to find a station arrondissement with UUID = {uuid}" 
+    
+    # Get method to retrieve Station's bikes available by it's UUID
+    def getStationNumBikesByUUID(self, uuid: int):
+        
+        with Database.getConnection as connection:
+            cursor = connection.cursor()
+            sqlGetStationNumBikes = "SELECT nbvelo FROM Station WHERE uuid = %(uuid)s"
+            cursor.execute(sqlGetStationNumBikes, {"uuid": uuid})
+            res = cursor.fetchone()
+        if res:
+            station_numbikes = res['nbvelo']
+            return station_numbikes
+        return f"unable to find a station's bikes number with UUID = {uuid}" 
+    
+    
+    def updateStation(self, station: Station):
+        
+        updated = False
+        
+        with Database.getConnection as connection:
+            cursor = connection.cursor()
+            sqlUpdateStation = """UPDATE Station SET nom = %(nom)s, 
+                                                    arrondissement = %(arrondissement)s,
+                                                    nbvelo = %(nbvelo)s,
+                                                    lon = %(lon)s,
+                                                    lat = %(lat)s,
+                                                    WHERE uuid = %(uuid)s"""
+            cursor.execute(sqlGetStationLoc, {"nom": station.getStationName,
+                                                "arrondissement": station.getStationArr,
+                                                "nbvelo": station.getStationNumBikes,
+                                                "lon": station.getStationLon,
+                                                "lat": station.getStationLat,
+                                                "uuid": station.getStationID})
+            res = cursor.fetchone()
+        if res:
+            return not(updated)
+        return updated

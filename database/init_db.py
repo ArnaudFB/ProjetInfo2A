@@ -1,6 +1,8 @@
 import sqlite3
 from sqlite3 import Error
+from datetime import datetime
 from utils.Singleton import Singleton
+
 
 class Database(metaclass=Singleton):  
     
@@ -54,23 +56,3 @@ class Database(metaclass=Singleton):
         finally:
             print ("Closing Connections ... ")
     
-    
-    def fillTables(data):
-        
-        data_station = data
-        
-        for records in data_station:
-            station_id=records['stationcode']
-            station_name=records['name']
-            lat=float((records['coordonnees_geo']['lat']))
-            lon=float((records['coordonnees_geo']['lon']))
-            nbvelo=records['numbikesavailable']
-            new_record={
-                'station': {
-                    'name':station_name,
-                    'uuid':station_id,
-                    'latitude':lat,
-                    'longitude':lon,
-                    },
-                }
-            station = Station({**new_record})
