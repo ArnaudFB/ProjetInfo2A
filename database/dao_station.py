@@ -8,7 +8,7 @@ import sqlite3
 class DAOStation(metaclass=Singleton):
     
     # Create method to get all Station in the database
-    def getAllStation(self, station: Station) -> dict[Station]:
+    def get_all_station(self, station: Station) -> dict[Station]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -19,7 +19,7 @@ class DAOStation(metaclass=Singleton):
         return
     
     # Create method to create a new Station in the database
-    def addNewStation(self, station: Station) -> bool:
+    def add_new_station(self, station: Station) -> bool:
         
         created = False
         
@@ -39,7 +39,7 @@ class DAOStation(metaclass=Singleton):
         return created
         
     # Get method to retrieve Station by it's UUID
-    def getStationByUUID(self, uuid: int):
+    def get_station_byuuid(self, uuid: int):
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -58,7 +58,7 @@ class DAOStation(metaclass=Singleton):
         return f"unable to find a station name with UUID = {uuid}"
     
     # Get method to retrieve Station by it's UUID
-    def getStationNameByUUID(self, uuid: int):
+    def get_station_name_byuuid(self, uuid: int):
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -71,7 +71,7 @@ class DAOStation(metaclass=Singleton):
         return f"unable to find a station name with UUID = {uuid}"
     
     # Get method to retrieve Station's arrondissement by it's UUID
-    def getStationArrByUUID(self, uuid: int):
+    def get_station_arr_byuuid(self, uuid: int):
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -84,7 +84,7 @@ class DAOStation(metaclass=Singleton):
         return f"unable to find a station arrondissement with UUID = {uuid}"    
     
     # Get method to retrieve Station's location by it's UUID
-    def getStationLocByUUID(self, uuid: int):
+    def get_station_loc_byuuid(self, uuid: int):
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -97,7 +97,7 @@ class DAOStation(metaclass=Singleton):
         return f"unable to find a station arrondissement with UUID = {uuid}" 
     
     # Get method to retrieve Station's bikes available by it's UUID
-    def getStationNumBikesByUUID(self, uuid: int):
+    def get_station_numbikes_byuuid(self, uuid: int):
         
         with Database.getConnection as connection:
             cursor = connection.cursor()

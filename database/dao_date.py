@@ -6,7 +6,7 @@ import sqlite3
 class DAODate(metaclass=Singleton):
     
     # Create method to create a new Station in the database
-    def addNewDate(self, date: Date) -> bool:
+    def add_new_date(self, date: Date) -> bool:
         
         created = False
         
@@ -20,7 +20,7 @@ class DAODate(metaclass=Singleton):
             return not(created)
         return created
     
-    def getDateByUUID(self, uuid: int) -> Date:
+    def get_date_byuuid(self, uuid: int) -> Date:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -32,7 +32,7 @@ class DAODate(metaclass=Singleton):
             return record
         return f"unable to find a date with UUID = {uuid}"   
     
-    def getUUIDByDate(self, date: Date) -> int:
+    def get_uuid_bydate(self, date: Date) -> int:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()

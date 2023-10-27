@@ -6,12 +6,12 @@ class Date:
         self.date = date
     
     @property
-    def getDate(self):
+    def get_date(self):
         return self.date
     
-    def isSuperior(self, date2) -> bool:
+    def is_superior(self, date2) -> bool:
         return (self.date >= date2)
     
-    def isInferior(self, date2) -> bool:
+    def is_inferior(self, date2) -> bool:
         return (self.date <= date2)
     
