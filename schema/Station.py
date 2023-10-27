@@ -1,5 +1,5 @@
-from data.Record import Record
-from data.Location import Location
+from data.record import Record
+from data.location import Location
 class Station:
     
     def __init__(self, station_id: int,station_name: str, loc: Location, numbikes: int):
