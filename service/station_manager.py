@@ -15,9 +15,8 @@ from database import dao_record
 
 class StationManager():
     
-    def __init__(self, base_url: str, data):
+    def __init__(self, base_url: str):
         self.base_url = base_url
-        self.data = data
     
     async def get_stations(self):
         # Initialize an HTTP client
@@ -37,7 +36,7 @@ class StationManager():
             except Exception as e:
                 return {"error": str(e)}  
     
-    def get_available_station(self, data):
+    def get_available_station(data):
         
         data_station = data
         velib_data = []
@@ -61,7 +60,7 @@ class StationManager():
         return {'velibs':velib_data}
         
     
-    def get_nearest_station(self, data, loc) -> int:
+    def get_nearest_station(data, loc) -> int:
         
         data_station = data
         distance = []
@@ -75,7 +74,7 @@ class StationManager():
         return nearest_station
     
         
-    def fill_tables(self, data):
+    def fill_tables(data):
         
         data_station = data
         
@@ -104,7 +103,7 @@ class StationManager():
             DAODate.add_new_date(date=new_date)
     
     
-    def refresh_station_every_minute(self, data):
+    def refresh_station_every_minute(data):
         
         data_station = data
         
