@@ -1,7 +1,7 @@
-from schema.Station import Station
-from schema.Location import Location
-from schema.Date import Date
-from schema.Record import Record
+from schema.station import Station
+from schema.location import Location
+from schema.date import Date
+from schema.record import Record
 from database.dao_station import DAOStation
 from database.dao_date import DAODate
 from database.dao_record import DAORecord
@@ -15,8 +15,9 @@ from database import dao_record
 
 class StationManager():
     
-    def __init__(self, base_url: str):
+    def __init__(self, base_url: str, data):
         self.base_url = base_url
+        self.data = data
     
     async def get_stations(self):
         # Initialize an HTTP client
@@ -36,7 +37,7 @@ class StationManager():
             except Exception as e:
                 return {"error": str(e)}  
     
-    def get_available_station(data):
+    def get_available_station(self, data):
         
         data_station = data
         velib_data = []
@@ -51,7 +52,7 @@ class StationManager():
                 'station': {
                     'station_name':station_name,
                     'station_uuid':station_id,
-                    'loc':Location(**{'lon': lon, 'lat':lat}),
+                    'loc':Location(lat=lat, lon=lon),
                     'numbikes':numbikes},
                 }
             if numbikes > 0:
@@ -60,21 +61,21 @@ class StationManager():
         return {'velibs':velib_data}
         
     
-    def get_nearest_station(data, loc) -> int:
+    def get_nearest_station(self, data, loc) -> int:
         
         data_station = data
         distance = []
         
         for station in data_station["velibs"]:
             station_loc = station["station"]["loc"]
-            dist = vincenty(loc, station_loc)
+            dist = vincenty(loc, station_loc.get_location)
             distance.append((dist, station["station"]))
         
         nearest_station = min(distance)[1]
         return nearest_station
     
         
-    def fill_tables(data):
+    def fill_tables(self, data):
         
         data_station = data
         
@@ -103,7 +104,7 @@ class StationManager():
             DAODate.add_new_date(date=new_date)
     
     
-    def refresh_station_every_minute(data):
+    def refresh_station_every_minute(self, data):
         
         data_station = data
         
