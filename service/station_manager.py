@@ -1,7 +1,7 @@
-from schema.station import Station
-from schema.location import Location
-from schema.date import Date
-from schema.record import Record
+from schema.Station import Station
+from schema.Location import Location
+from schema.Date import Date
+from schema.Record import Record
 from database.dao_station import DAOStation
 from database.dao_date import DAODate
 from database.dao_record import DAORecord
@@ -51,7 +51,7 @@ class StationManager():
                 'station': {
                     'station_name':station_name,
                     'station_uuid':station_id,
-                    'loc':Location(lat=lat, lon=lon),
+                    'loc':Location(**{'lon': lon, 'lat':lat}),
                     'numbikes':numbikes},
                 }
             if numbikes > 0:
@@ -67,7 +67,7 @@ class StationManager():
         
         for station in data_station["velibs"]:
             station_loc = station["station"]["loc"]
-            dist = vincenty(loc, station_loc.get_location)
+            dist = vincenty(loc, station_loc)
             distance.append((dist, station["station"]))
         
         nearest_station = min(distance)[1]

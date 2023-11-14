@@ -1,8 +1,8 @@
 
-from schema.record import Record
-from schema.location import Location
+from schema.Record import Record
+from schema.Location import Location
 from pydantic import BaseModel, field_validator
-
+from schema.location import Location
 class Station(BaseModel):
     
     station_uuid: int
@@ -61,3 +61,4 @@ class Station(BaseModel):
     @property
     def getStationArr(self) -> int:
         return self._stationArr
+    

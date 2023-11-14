@@ -1,4 +1,4 @@
-from schema.date import Date
+from schema.Date import Date
 from datetime import datetime
 from pydantic import BaseModel, field_validator
 
@@ -41,3 +41,4 @@ class Record(BaseModel):
     @property
     def getVariation(self) -> int:
         return self.variation
+    
