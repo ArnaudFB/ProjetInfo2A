@@ -13,30 +13,30 @@ class Database(metaclass=Singleton):
     def getConnection(self):
         return self.__connection
 
-    def initializeTables():
+    def initializeTables(self):
         # Create the Station table
         initialize_station_request = """CREATE TABLE IF NOT EXISTS Station (
-            uuid INT PRIMARY KEY,
-            arrondissement INT,
+            uuid INTEGER PRIMARY KEY,
+            arrondissement INTEGER,
             nom TEXT,
-            nbvelo INT,
+            nbvelo INTEGER  ,
             lon NUMERIC(10, 6),
             lat NUMERIC(10, 6)
         );"""
 
         # Create the Date table
         initialize_date_request = """CREATE TABLE IF NOT EXISTS Date (
-            uuid INT PRIMARY KEY AUTO INCREMENT,
+            uuid INTEGER PRIMARY KEY AUTOINCREMENT,
             date_minute DATETIME
         );"""
 
         # Create the Record table
         initialize_record_request = """CREATE TABLE IF NOT EXISTS Record (
-            station_uuid INT,
-            date_uuid INT,
-            variation INT,
-            FOREIGN KEY (station_id) REFERENCES Station(id),
-            FOREIGN KEY (date_id) REFERENCES Date(id)
+            station_uuid INTEGER,
+            date_uuid INTEGER,
+            variation INTEGER,
+            FOREIGN KEY(station_id) REFERENCES Station(id),
+            FOREIGN KEY(date_id) REFERENCES Date(id)
         );"""
 
         # Create cursor to execute SQL commands

@@ -1,4 +1,4 @@
-from schema.Date import Date
+from schema.date import Date
 from datetime import datetime
 from pydantic import BaseModel, field_validator
 

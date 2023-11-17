@@ -1,5 +1,7 @@
-fastapi
-requests
-uvicorn
-httpx
-vincenty
+fastapi~=0.104.0
+requests~=2.31.0
+uvicorn~=0.23.2
+httpx~=0.25.0
+vincenty~=0.1.4
+
+pydantic~=2.4.2
