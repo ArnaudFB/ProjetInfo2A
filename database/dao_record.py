@@ -15,9 +15,9 @@ class DAORecord(metaclass=Singleton):
             cursor = connection.cursor()
             sqlAddStation = """INSERT INTO Record (station_uuid, date_uuid, variation )
                             VALUES (%(station_uuid)s, %(date_uuid)s, %(variation)s)"""
-            cursor.execute(sqlAddStation, {"station_uuid": record.getStationUuid,
-                                    "date_uuid": record.getDateUuid,
-                                    "variation": record.getVariation,
+            cursor.execute(sqlAddStation, {"station_uuid": record.get_station_uuid,
+                                    "date_uuid": record.get_date_uuid,
+                                    "variation": record.get_variation,
                                     })
             res = cursor.fetchone()
         if res:

@@ -27,12 +27,12 @@ class DAOStation(metaclass=Singleton):
             cursor = connection.cursor()
             sqlAddStation = """INSERT INTO Station (uuid, arrondissement, nom, nbvelo, lon, lat)
                             VALUES (%(uuid)s,%(arrondissement)s %(name)s, %(nbvelo)s, %(lon)s, %(lat)s)"""
-            cursor.execute(sqlAddStation, {"uuid": station.getStationID,
-                                    "arrondissement": station.getStationArr,
-                                    "name": station.getStationName,
-                                    "nbvelo": station.getStationNumBikes,
-                                    "lon": station.getStationLon,
-                                    "lat": station.getStationLat})
+            cursor.execute(sqlAddStation, {"uuid": station.get_station_id,
+                                    "arrondissement": station.get_station_arr,
+                                    "name": station.get_station_name,
+                                    "nbvelo": station.get_station_num_bikes,
+                                    "lon": station.get_station_lon,
+                                    "lat": station.get_station_lat})
             res = cursor.fetchone()
         if res:
             return not(created)
@@ -122,12 +122,12 @@ class DAOStation(metaclass=Singleton):
                                                     lon = %(lon)s,
                                                     lat = %(lat)s,
                                                     WHERE uuid = %(uuid)s"""
-            cursor.execute(sqlUpdateStation, {"nom": station.getStationName,
-                                                "arrondissement": station.getStationArr,
-                                                "nbvelo": station.getStationNumBikes,
-                                                "lon": station.getStationLon,
-                                                "lat": station.getStationLat,
-                                                "uuid": station.getStationID})
+            cursor.execute(sqlUpdateStation, {"nom": station.get_station_name,
+                                                "arrondissement": station.get_station_arr,
+                                                "nbvelo": station.get_station_num_bikes,
+                                                "lon": station.get_station_lon,
+                                                "lat": station.get_station_lat,
+                                                "uuid": station.get_station_id})
             res = cursor.fetchone()
         if res:
             return not(updated)

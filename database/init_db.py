@@ -35,8 +35,8 @@ class Database(metaclass=Singleton):
             station_uuid INTEGER,
             date_uuid INTEGER,
             variation INTEGER,
-            FOREIGN KEY(station_id) REFERENCES Station(id),
-            FOREIGN KEY(date_id) REFERENCES Date(id)
+            FOREIGN KEY(station_uuid) REFERENCES Station(uuid),
+            FOREIGN KEY(date_uuid) REFERENCES Date(id)
         );"""
 
         # Create cursor to execute SQL commands
