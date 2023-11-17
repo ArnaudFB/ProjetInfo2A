@@ -1,8 +1,7 @@
 import unittest
 from datetime import datetime
-from service.record_manager import RecordManager  
-from database.dao_record import DAORecord  # Importez la classe DAORecord du package database
-
+from database.dao_record import DAORecord  
+from service.record_manager import RecordManager
 class TestRecordManager(unittest.TestCase):
     def test_get_min_frequentation_station(self):
         # Simulez la méthode DAORecord.get_var_groupstation_bydate
@@ -19,4 +18,7 @@ class TestRecordManager(unittest.TestCase):
         # Testez avec des dates d'exemple
         result = RecordManager.get_max_frequentation_arrondissement(datetime(2023, 1, 1), datetime(2023, 1, 10))
         self.assertEqual(result, 1)  # Remplacez par le résultat attendu
+
+if __name__ == '__main__':
+    unittest.main()
 
