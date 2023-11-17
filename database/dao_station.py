@@ -2,13 +2,14 @@ from database.init_db import Database
 from utils.singleton import Singleton
 from schema.station import Station
 from schema.location import Location
+from dao import DAO
 import sqlite3
 
 
-class DAOStation(metaclass=Singleton):
+class DAOStation(DAO, metaclass=Singleton):
     
     # Create method to get all Station in the database
-    def get_all_station(self, station: Station) -> dict[Station]:
+    def get_all(self, station: Station) -> dict[Station]:
         
         with Database.getConnection as connection:
             cursor = connection.cursor()
@@ -19,7 +20,7 @@ class DAOStation(metaclass=Singleton):
         return 
     
     # Create method to create a new Station in the database
-    def add_new_station(self, station: Station) -> bool:
+    def add_new(self, station: Station) -> bool:
         
         created = False
         

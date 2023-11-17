@@ -7,7 +7,17 @@ from datetime import datetime
 
 class DAORecord(metaclass=Singleton):
     
-    def add_new_record(self, record: Record) -> bool:
+    def get_all(self, record:Record) -> dict[Record]:
+
+        with Database.getConnection as connection:
+            cursor = connection.cursor() 
+            sqlGetAllRecord = """SELECT * FROM Record;"""
+            cursor.execute(sqlGetAllRecord)
+            res=cursor.fetchall()
+        
+        return 
+    
+    def add_new(self, record: Record) -> bool:
         
         created = False
             
