@@ -11,11 +11,11 @@ class DAORecord(metaclass=Singleton):
         
         created = False
             
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlAddStation = """INSERT INTO Record (station_uuid, date_uuid, variation )
+            sql_add_station = """INSERT INTO Record (station_uuid, date_uuid, variation )
                             VALUES (%(station_uuid)s, %(date_uuid)s, %(variation)s)"""
-            cursor.execute(sqlAddStation, {"station_uuid": record.get_station_uuid,
+            cursor.execute(sql_add_station, {"station_uuid": record.get_station_uuid,
                                     "date_uuid": record.get_date_uuid,
                                     "variation": record.get_variation,
                                     })
@@ -26,14 +26,14 @@ class DAORecord(metaclass=Singleton):
     
     def get_var_bystation_date_existing_station(self, station_uuid: int, date_start : datetime, date_end : datetime) -> list[int]:
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetRecord = """SELECT variation FROM Record 
+            sql_get_record = """SELECT variation FROM Record 
                             INNER JOIN Date on uuid=date_uuid 
                             WHERE (station_uuid = %(station_uuid)s)
                             AND (date_minute>= %(date_start)s) 
                             AND (date_minute<= %(date_end)s)  """
-            cursor.execute(sqlGetRecord, {"station_uuid": station_uuid,
+            cursor.execute(sql_get_record, {"station_uuid": station_uuid,
                                         "date_start": date_start,
                                         "date_end": date_end})
             res = cursor.fetchall()
@@ -47,14 +47,14 @@ class DAORecord(metaclass=Singleton):
 
     def get_var_groupstation_bydate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetRecord = """SELECT station_uuid, sum(variation) FROM Record 
+            sql_get_record = """SELECT station_uuid, sum(variation) FROM Record 
                             INNER JOIN Date on uuid=date_uuid 
                             WHERE (date_minute>= %(date_start)s) 
                             AND (date_minute<= %(date_end)s)
                             GROUP BY station_uuid  """
-            cursor.execute(sqlGetRecord, {"date_start": date_start,
+            cursor.execute(sql_get_record, {"date_start": date_start,
                                         "date_end": date_end})
             res = cursor.fetchall()
         if res:
@@ -67,15 +67,15 @@ class DAORecord(metaclass=Singleton):
 
     def get_var_byarr_date(self, arrondissement : int , date_start : datetime, date_end : datetime) -> list[tuple]:
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetRecord = """SELECT variation FROM Record r
+            sql_get_record = """SELECT variation FROM Record r
                             INNER JOIN Date d on d.uuid=r.date_uuid
                             INNER JOIN Station s on s.uuid=r.station_uuid 
                             WHERE (s.arrondissement=%(arrondissement)s )
                             AND(date_minute>= %(date_start)s) 
                             AND (date_minute<= %(date_end)s)  """
-            cursor.execute(sqlGetRecord, {"arrondissement": arrondissement, 
+            cursor.execute(sql_get_record, {"arrondissement": arrondissement,
                                         "date_start": date_start,
                                         "date_end": date_end})
             res = cursor.fetchall()
@@ -89,15 +89,15 @@ class DAORecord(metaclass=Singleton):
 
     def get_var_grouparr_bydate(self, date_start : datetime, date_end : datetime) -> list[tuple]:
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetRecord = """SELECT arrondissement, sum(variation) FROM Record r
+            sql_get_record = """SELECT arrondissement, sum(variation) FROM Record r
                             INNER JOIN Date d on d.uuid=r.date_uuid
                             INNER JOIN Station s on s.uuid=r.station_uuid 
                             WHERE (date_minute>= %(date_start)s) 
                             AND (date_minute<= %(date_end)s)
                             GROUP BY arrondissement  """
-            cursor.execute(sqlGetRecord, {"date_start": date_start,
+            cursor.execute(sql_get_record, {"date_start": date_start,
                                         "date_end": date_end})
             res = cursor.fetchall()
         if res:

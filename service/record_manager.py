@@ -1,7 +1,5 @@
 from database.dao_record import DAORecord
 from datetime import datetime
-
-
 class RecordManager():
     
     def get_min_frequentation_station(date_start : datetime, date_end : datetime, cutting : str ) -> int :
