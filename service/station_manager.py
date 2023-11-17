@@ -5,12 +5,10 @@ from schema.record import Record
 from database.dao_station import DAOStation
 from database.dao_date import DAODate
 from database.dao_record import DAORecord
-from database.init_db import Database
 from vincenty import vincenty
 from datetime import datetime
 import httpx
 import time
-from database import dao_record
 
 
 class StationManager():
@@ -60,7 +58,7 @@ class StationManager():
                     'numbikes': numbikes},
             }
             if numbikes > 0:
-                velib_data.append({**new_record})
+                velib_data.append(new_record)
 
         return {'velibs': velib_data}
 
@@ -71,13 +69,13 @@ class StationManager():
 
         for station in data_station["velibs"]:
             station_loc = station["station"]["loc"]
-            dist = vincenty(loc, station_loc.getLocation)
+            dist = vincenty(loc, station_loc.get_location)
             distance.append((dist, station["station"]))
 
         nearest_station = min(distance)[1]
-        return nearest_station
+        return Station(**nearest_station)
 
-    def fill_tables(data):
+    def fill_tables(self, data):
 
         data_station = data
 
@@ -105,7 +103,7 @@ class StationManager():
             DAOStation.add_new_station(station=new_station)
             DAODate.add_new_date(date=new_date)
 
-    def refresh_station_every_minute(data):
+    def refresh_station_every_minute(self, data):
 
         data_station = data
 

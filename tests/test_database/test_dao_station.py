@@ -43,10 +43,10 @@ class TestDAOStation(unittest.TestCase):
 
         # then
         self.assertIsInstance(result, Station)
-        self.assertEqual(result.getStationID(), 12563)
-        self.assertEqual(result.getStationName(), 'Station A')
-        self.assertEqual(result.getStationLocation().getLongitude(), 10.0)
-        self.assertEqual(result.getStationLocation().getLatitude(), 20.0)
+        self.assertEqual(result.get_station_id(), 12563)
+        self.assertEqual(result.get_station_name(), 'Station A')
+        self.assertEqual(result.getStationLocation().get_longitude(), 10.0)
+        self.assertEqual(result.getStationLocation().get_latitude(), 20.0)
 
     def test_nonexistant_get_station_byuuid(self): 
         dao_station = DAOStation()
