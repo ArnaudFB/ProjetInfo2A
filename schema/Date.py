@@ -1,10 +1,8 @@
 from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
-
 class Date(BaseModel):
     
     date: datetime = Field(default=datetime.now().replace(second=0, microsecond=0))
-    
     @field_validator("date")
     def date_cant_be_in_future(cls, v):
         if v > datetime.now():
