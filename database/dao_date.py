@@ -1,5 +1,5 @@
 from database.init_db import Database
-from utils.singleton import Singleton
+from utils.Singleton import Singleton
 from schema.date import Date
 
 class DAODate(metaclass=Singleton):
