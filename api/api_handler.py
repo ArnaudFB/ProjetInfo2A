@@ -29,27 +29,27 @@ async def get_nearest_station(user_location: str = Query(Location(**{'lon':48.85
     station = StationManager.get_available_station(station)
     
     station = StationManager.get_nearest_station(station, user_location)
-    
+
     return station
 
-@app.get("/fonctionnalite-2/")    
-async def get_least_freq_stat(date_debut : datetime, date_fin : datetime):
 
-    station_moins_frequente=DAORecord.get_min_frequentation_station(date_debut,date_fin)
+@app.get("/fonctionnalite-2/", response_model=str)    
+async def get_least_freq_stat(date_debut : datetime, date_fin : datetime, period = Query("d") ):
+
+    station_moins_frequente = RecordManager.get_min_frequentation_station(date_debut,date_fin,period)
     
-    return f"La station la moins fréquentée entre {date_debut} et {date_fin} : {station_moins_frequente}"
+    return station_moins_frequente
 
-@app.get("/fonctionnalite-3/")    
-async def get_freq_arr(date_debut : datetime, date_fin : datetime):
+
+
+@app.get("/fonctionnalite-3/", response_model=str)    
+async def getFreqArr(date_debut : datetime, date_fin : datetime, period = Query("d") ):
         
-    arrondissement_plus_frequente = DAORecord.get_max_frequentation_arrondissement(date_debut,date_fin)
+    arrondissement_plus_frequente = RecordManager.get_max_frequentation_arrondissement(date_debut,date_fin, period)
     
-    return f"L'arrandissement le plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
-    
+    return arrondissement_plus_frequente
+
+
 if __name__ == "__main__":
     print("Starting server")
     uvicorn.run(app, host = "127.0.0.1", port = 8000)
-
-'''
-    data = await StationManager(BASE_URL).get_stations()
-    StationManager(BASE_URL).fill_tables(data)'''
