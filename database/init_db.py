@@ -10,10 +10,10 @@ class Database(metaclass=Singleton):
         self.__connection = sqlite3.connect(db_file)
     
     # Create connection to the main DB
-    def getConnection(self):
+    def get_connection(self):
         return self.__connection
 
-    def initializeTables(self):
+    def initialize_tables(self):
         # Create the Station table
         initialize_station_request = """CREATE TABLE IF NOT EXISTS Station (
             uuid INTEGER PRIMARY KEY,
@@ -40,7 +40,7 @@ class Database(metaclass=Singleton):
         );"""
 
         # Create cursor to execute SQL commands
-        conn = self.getConnection()
+        conn = self.get_connection()
         cur = conn.cursor()
 
         # Execute SQL commands to initialize DB and TABLES

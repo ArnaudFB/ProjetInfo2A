@@ -135,6 +135,5 @@ class StationManager():
                         new_record = Record(station_uuid=station_id, date_uuid=date_uuid, variation=variation)
                         DAORecord.add_new_record(record=new_record)
                 finally:
-                    connection.close()
-
+                    pass
             time.sleep(60)

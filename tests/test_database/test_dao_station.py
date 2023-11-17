@@ -24,7 +24,7 @@ class TestDAOStation(unittest.TestCase):
     def test_add_new_station_error(self):
     
         dao_station = DAOStation()
-        dao_station.getConnection = MagicMock(side_effect=Exception("Database connection error"))
+        dao_station.get_connection = MagicMock(side_effect=Exception("Database connection error"))
 
         
         with self.assertRaises(Exception) as context:
