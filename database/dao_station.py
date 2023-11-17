@@ -11,29 +11,29 @@ class DAOStation(DAO, metaclass=Singleton):
     # Create method to get all Station in the database
     def get_all(self, station: Station) -> dict[Station]:
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetAllStation = """SELECT * FROM Station;"""
-            cursor.execute(sqlGetAllStation)
+            sql_get_all_station = """SELECT * FROM Station;"""
+            cursor.execute(sql_get_all_station)
             res = cursor.fetchall()
         
-        return 
+        return res
     
     # Create method to create a new Station in the database
     def add_new(self, station: Station) -> bool:
         
         created = False
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlAddStation = """INSERT INTO Station (uuid, arrondissement, nom, nbvelo, lon, lat)
+            sql_add_station = """INSERT INTO Station (uuid, arrondissement, nom, nbvelo, lon, lat)
                             VALUES (%(uuid)s,%(arrondissement)s %(name)s, %(nbvelo)s, %(lon)s, %(lat)s)"""
-            cursor.execute(sqlAddStation, {"uuid": station.getStationID,
-                                    "arrondissement": station.getStationArr,
-                                    "name": station.getStationName,
-                                    "nbvelo": station.getStationNumBikes,
-                                    "lon": station.getStationLon,
-                                    "lat": station.getStationLat})
+            cursor.execute(sql_add_station, {"uuid": station.get_station_id,
+                                    "arrondissement": station.get_station_arr,
+                                    "name": station.get_station_name,
+                                    "nbvelo": station.get_station_num_bikes,
+                                    "lon": station.get_station_lon,
+                                    "lat": station.get_station_lat})
             res = cursor.fetchone()
         if res:
             return not(created)
@@ -42,10 +42,10 @@ class DAOStation(DAO, metaclass=Singleton):
     # Get method to retrieve Station by it's UUID
     def get_station_byuuid(self, uuid: int):
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetStation = "SELECT uuid, nom, nbvelo, lon, lat, arrondissement FROM Station WHERE uuid = %(uuid)s"
-            cursor.execute(sqlGetStation, {"uuid": uuid})
+            sql_get_station = "SELECT uuid, nom, nbvelo, lon, lat, arrondissement FROM Station WHERE uuid = %(uuid)s"
+            cursor.execute(sql_get_station, {"uuid": uuid})
             res = cursor.fetchone()
         if res:
             station_uuid = res['uuid']
@@ -61,10 +61,10 @@ class DAOStation(DAO, metaclass=Singleton):
     # Get method to retrieve Station by it's UUID
     def get_station_name_byuuid(self, uuid: int):
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetStation = "SELECT nom FROM Station WHERE uuid = %(uuid)s"
-            cursor.execute(sqlGetStation, {"uuid": uuid})
+            sql_get_station = "SELECT nom FROM Station WHERE uuid = %(uuid)s"
+            cursor.execute(sql_get_station, {"uuid": uuid})
             res = cursor.fetchone()
         if res:
             station_name = res['nom']
@@ -74,10 +74,10 @@ class DAOStation(DAO, metaclass=Singleton):
     # Get method to retrieve Station's arrondissement by it's UUID
     def get_station_arr_byuuid(self, uuid: int):
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetStationArr = "SELECT arrondissement FROM Station WHERE uuid = %(uuid)s"
-            cursor.execute(sqlGetStationArr, {"uuid": uuid})
+            sql_get_station_arr = "SELECT arrondissement FROM Station WHERE uuid = %(uuid)s"
+            cursor.execute(sql_get_station_arr, {"uuid": uuid})
             res = cursor.fetchone()
         if res:
             station_arr = res['arrondissement']
@@ -87,10 +87,10 @@ class DAOStation(DAO, metaclass=Singleton):
     # Get method to retrieve Station's location by it's UUID
     def get_station_loc_byuuid(self, uuid: int):
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetStationLoc = "SELECT lon, lat FROM Station WHERE uuid = %(uuid)s"
-            cursor.execute(sqlGetStationLoc, {"uuid": uuid})
+            sql_get_station_loc = "SELECT lon, lat FROM Station WHERE uuid = %(uuid)s"
+            cursor.execute(sql_get_station_loc, {"uuid": uuid})
             res = cursor.fetchone()
         if res:
             station_loc = res['lon'], res['lat']
@@ -100,10 +100,10 @@ class DAOStation(DAO, metaclass=Singleton):
     # Get method to retrieve Station's bikes available by its UUID
     def get_station_numbikes_byuuid(self, uuid: int):
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetStationNumBikes = "SELECT nbvelo FROM Station WHERE uuid = %(uuid)s"
-            cursor.execute(sqlGetStationNumBikes, {"uuid": uuid})
+            sql_get_station_num_bikes = "SELECT nbvelo FROM Station WHERE uuid = %(uuid)s"
+            cursor.execute(sql_get_station_num_bikes, {"uuid": uuid})
             res = cursor.fetchone()
         if res:
             station_numbikes = res['nbvelo']
@@ -115,20 +115,20 @@ class DAOStation(DAO, metaclass=Singleton):
         
         updated = False
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlUpdateStation = """UPDATE Station SET nom = %(nom)s, 
+            sql_update_station = """UPDATE Station SET nom = %(nom)s, 
                                                     arrondissement = %(arrondissement)s,
                                                     nbvelo = %(nbvelo)s,
                                                     lon = %(lon)s,
                                                     lat = %(lat)s,
                                                     WHERE uuid = %(uuid)s"""
-            cursor.execute(sqlUpdateStation, {"nom": station.getStationName,
-                                                "arrondissement": station.getStationArr,
-                                                "nbvelo": station.getStationNumBikes,
-                                                "lon": station.getStationLon,
-                                                "lat": station.getStationLat,
-                                                "uuid": station.getStationID})
+            cursor.execute(sql_update_station, {"nom": station.get_station_name,
+                                                "arrondissement": station.get_station_arr,
+                                                "nbvelo": station.get_station_num_bikes,
+                                                "lon": station.get_station_lon,
+                                                "lat": station.get_station_lat,
+                                                "uuid": station.get_station_id})
             res = cursor.fetchone()
         if res:
             return not(updated)

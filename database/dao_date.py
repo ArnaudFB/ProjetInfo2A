@@ -1,7 +1,6 @@
 from database.init_db import Database
 from utils.singleton import Singleton
 from schema.date import Date
-import sqlite3
 
 class DAODate(metaclass=Singleton):
 
@@ -19,11 +18,11 @@ class DAODate(metaclass=Singleton):
         
         created = False
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlAddDate = """INSERT INTO Date (date_minute)
+            sql_add_date = """INSERT INTO Date (date_minute)
                             VALUES (%(date_minute)s)"""
-            cursor.execute(sqlAddDate, {"name": Date.getDate()})
+            cursor.execute(sql_add_date, {"name": Date.getDate()})
             res = cursor.fetchone()
         if res:
             return not(created)
@@ -31,10 +30,10 @@ class DAODate(metaclass=Singleton):
     
     def get_date_byuuid(self, uuid: int) -> Date:
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetDate = "SELECT date_minute FROM Date WHERE uuid = %(uuid)s"
-            cursor.execute(sqlGetDate, {"uuid": uuid}) 
+            sql_get_date = "SELECT date_minute FROM Date WHERE uuid = %(uuid)s"
+            cursor.execute(sql_get_date, {"uuid": uuid})
             res = cursor.fetchone()
         if res:
             record = res['date_minute']
@@ -43,10 +42,10 @@ class DAODate(metaclass=Singleton):
     
     def get_uuid_bydate(self, date: Date) -> int:
         
-        with Database.getConnection as connection:
+        with Database.get_connection as connection:
             cursor = connection.cursor()
-            sqlGetUUID = "SELECT uuid FROM Date WHERE date_minute = %(date_minute)s"
-            cursor.execute(sqlGetUUID, {"date_minute": date})
+            sql_get_uuid = "SELECT uuid FROM Date WHERE date_minute = %(date_minute)s"
+            cursor.execute(sql_get_uuid, {"date_minute": date})
             res = cursor.fetchone()
         if res:
             record = res['uuid']
