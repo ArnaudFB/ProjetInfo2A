@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import MagicMock
 from database import dao_record
 from schema import record
-
+from datetime import datetime 
 
 class TestDAORecord(unittest.TestCase):
 
