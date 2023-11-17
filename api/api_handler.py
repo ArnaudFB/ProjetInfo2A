@@ -4,10 +4,12 @@ import uvicorn
 
 from schema.location import Location
 
-from database.dao_record import DAORecord
+from database.dao_record import RecordManager
 from database.init_db import Database
 
 from service.station_manager import StationManager
+
+from service.record_manager import RecordManager
 
 from datetime import datetime
 
@@ -37,7 +39,7 @@ async def get_nearest_station(user_location: str = Query(Location(**{'lon':48.85
 @app.get("/fonctionnalite-2/")    
 async def getLeastFreqStat(date_debut : datetime, date_fin : datetime):
 
-    station_moins_frequente=DAORecord.get_min_frequentation_station(date_debut,date_fin)
+    station_moins_frequente = RecordManager.get_min_frequentation_station(date_debut,date_fin)
     
     return f"La station la moins fréquentée entre {date_debut} et {date_fin} : {station_moins_frequente}"
 
@@ -46,7 +48,7 @@ async def getLeastFreqStat(date_debut : datetime, date_fin : datetime):
 @app.get("/fonctionnalite-3/")    
 async def getFreqArr(date_debut : datetime, date_fin : datetime):
         
-    arrondissement_plus_frequente = DAORecord.get_max_frequentation_arrondissement(date_debut,date_fin)
+    arrondissement_plus_frequente = RecordManager.get_max_frequentation_arrondissement(date_debut,date_fin)
     
     return f"L'arrandissement le plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
     
@@ -57,7 +59,7 @@ async def getFreqArr(date_debut : datetime, date_fin : datetime):
 @app.get("/fonctionnalite-2/")    
 async def getLeastFreqStat(date_debut : datetime, date_fin : datetime):
 
-    station_moins_frequente=DAORecord.get_min_frequentation_station(date_debut,date_fin)
+    station_moins_frequente=RecordManager.get_min_frequentation_station(date_debut,date_fin)
      
     
     return f"La station la moins fréquentée entre {date_debut} et {date_fin} : {station_moins_frequente}"
@@ -67,7 +69,7 @@ async def getLeastFreqStat(date_debut : datetime, date_fin : datetime):
 @app.get("/fonctionnalite-3/")    
 async def getFreqArr(date_debut : datetime, date_fin : datetime):
         
-    arrondissement_plus_frequente = DAORecord.get_max_frequentation_arrondissement(date_debut,date_fin)
+    arrondissement_plus_frequente = RecordManager.get_max_frequentation_arrondissement(date_debut,date_fin)
     
     return f"L'arrandissement le plus fréquentée entre {date_debut} et {date_fin} : {arrondissement_plus_frequente}"
     
