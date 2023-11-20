@@ -41,7 +41,6 @@ async def get_least_freq_stat(date_debut : datetime, date_fin : datetime, period
     return station_moins_frequente
 
 
-
 @app.get("/fonctionnalite-3/", response_model=str)    
 async def getFreqArr(date_debut : datetime, date_fin : datetime, period = Query("d") ):
         
