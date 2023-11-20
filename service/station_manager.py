@@ -120,7 +120,7 @@ class StationManager():
                     actual_num_bikes = DAOStation.get_station_numbikes_byuuid(uuid=station_id)
                     if abs(actual_num_bikes - previous_num_bikes) > 0:
                         variation = abs(actual_num_bikes - previous_num_bikes)
-                        date_uuid = DAODate.get_uuid_bydate(date=Date().get_date)
+                        date_uuid = DAODate.get_uuid_bydate(formatted_timestamp)
                         new_record = Record(station_uuid=station_id, date_uuid=int(date_uuid), variation=variation)
                         DAORecord.add_new(record=new_record)
                 finally:
