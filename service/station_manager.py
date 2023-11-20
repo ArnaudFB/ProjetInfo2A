@@ -88,10 +88,10 @@ class StationManager():
 
             new_station = Station(station_uuid=station_uuid, station_name=station_name, loc=station_loc, numbikes=nbvelo)
 
-            DAOStation.add_new_station(station=new_station)
+            DAOStation.add_new(station=new_station)
 
         new_date = Date().get_date
-        DAODate.add_new_date(date_time=new_date)
+        DAODate.add_new(date_time=new_date)
 
     def refresh_station_every_minute(self):
 
@@ -102,7 +102,7 @@ class StationManager():
 
             data_station = self.get_stations()
 
-            DAODate.add_new_date(formatted_timestamp)
+            DAODate.add_new(formatted_timestamp)
 
             for records in data_station:
                 station_id = records['stationcode']
@@ -122,7 +122,7 @@ class StationManager():
                         variation = abs(actual_num_bikes - previous_num_bikes)
                         date_uuid = DAODate.get_uuid_bydate(date=Date().get_date)
                         new_record = Record(station_uuid=station_id, date_uuid=int(date_uuid), variation=variation)
-                        DAORecord.add_new_record(record=new_record)
+                        DAORecord.add_new(record=new_record)
                 finally:
                     pass
             time.sleep(60)
