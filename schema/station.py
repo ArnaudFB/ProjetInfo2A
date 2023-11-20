@@ -38,29 +38,29 @@ class Station(BaseModel):
                     
     @property
     def get_station_id(self) -> int:
-        return self._stationId
+        return self.station_uuid
             
     @property
     def get_station_name(self) -> str:
-        return self._stationName
+        return self.station_name
     
     @property
     def get_station_num_bikes(self) -> int:
-        return self.__numbikes
+        return self.numbikes
     
     @property
     def get_station_coordinates(self) -> tuple[float]:
-        return self.__loc.get_location
+        return self.loc.get_location
     
     @property
     def get_station_lon(self) -> float:
-        return self.__loc.get_longitude
+        return self.loc.get_longitude
     
     @property
     def get_station_lat(self) -> float:
-        return self.__loc.get_latitude
+        return self.loc.get_latitude
     
     @property
     def get_station_arr(self) -> int:
-        return self._stationArr
+        return self.station_arr
     

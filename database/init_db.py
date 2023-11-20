@@ -1,17 +1,24 @@
 import sqlite3
 from sqlite3 import Error
 from datetime import datetime
-from utils.Singleton import Singleton
+from utils.singleton import Singleton
 
 
 class Database(metaclass=Singleton):  
     
     def __init__(self, db_file:str = "project_database.db"):
-        self.__connection = sqlite3.connect(db_file)
+        self.__db_file = db_file
     
     # Create connection to the main DB
     def get_connection(self):
+        return sqlite3.connect(self.__db_file)
+
+    def __enter__(self):
+        self.__connection = self.get_connection()
         return self.__connection
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.__connection.close()
 
     def initialize_tables(self):
         # Create the Station table
@@ -27,7 +34,7 @@ class Database(metaclass=Singleton):
         # Create the Date table
         initialize_date_request = """CREATE TABLE IF NOT EXISTS Date (
             uuid INTEGER PRIMARY KEY AUTOINCREMENT,
-            date_minute DATETIME
+            date_minute TEXT
         );"""
 
         # Create the Record table
