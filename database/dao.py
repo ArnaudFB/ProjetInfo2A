@@ -1,5 +1,3 @@
-from database.init_db import Database
-from utils.singleton import Singleton
 from abc import ABC, abstractmethod
 
 class DAO(ABC):
