@@ -1,11 +1,21 @@
 from database.init_db import Database
-from utils.singleton import Singleton
+from utils.Singleton import Singleton
 from schema.date import Date
+from database.dao import DAO
 
-class DAODate(metaclass=Singleton):
+class DAODate(DAO,metaclass=Singleton):
+
+    def get_all(self, date:Date) -> dict[Date]:
+
+        with Database.getConnection as connection:
+            cursor = connection.cursor() 
+            sqlGetAllDate = """SELECT * FROM Date;"""
+            cursor.execute(sqlGetAllDate)
+            res=cursor.fetchall()
+        
+        return 
     
-    # Create method to create a new Station in the database
-    def add_new_date(self, date: Date) -> bool:
+    def add_new(self, date: Date) -> bool:
         
         created = False
         

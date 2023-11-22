@@ -1,13 +1,23 @@
-from utils.Singleton import Singleton
+from utils.singleton import Singleton
 from database.init_db import Database
 from schema.record import Record
 import sqlite3
 from datetime import datetime 
+from database.dao import DAO
 
-
-class DAORecord(metaclass=Singleton):
+class DAORecord(DAO, metaclass=Singleton):
     
-    def add_new_record(self, record: Record) -> bool:
+    def get_all(self, record:Record) -> dict[Record]:
+
+        with Database.getConnection as connection:
+            cursor = connection.cursor() 
+            sqlGetAllRecord = """SELECT * FROM Record;"""
+            cursor.execute(sqlGetAllRecord)
+            res=cursor.fetchall()
+        
+        return 
+    
+    def add_new(self, record: Record) -> bool:
         
         created = False
             

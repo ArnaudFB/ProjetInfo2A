@@ -1,6 +1,6 @@
 from schema.station import Station
 from schema.location import Location
-from schema.date import Date
+from schema.Date import Date
 from schema.record import Record
 from database.dao_station import DAOStation
 from database.dao_date import DAODate
