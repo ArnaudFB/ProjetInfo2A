@@ -12,7 +12,6 @@ from schema.location import Location
 from schema.record import Record
 from schema.station import Station
 
-
 class StationManager():
 
     def __init__(self, base_url: str):
@@ -77,7 +76,9 @@ class StationManager():
         return Station(**nearest_station)
 
     def get_geographic_data(address: str):
+
         ETALAB_GEO_API = "https://api-adresse.data.gouv.fr/search/"
+
         params = {'q': address, 'limit': 1}
         response = requests.get(ETALAB_GEO_API, params=params)
 
@@ -85,7 +86,7 @@ class StationManager():
             data = response.json()
             if data.get('features'):
                 geographic_data = data['features'][0]['geometry']['coordinates']
-                user_location = {'lon': geographic_data[0], 'lat': geographic_data[1]}
+                user_location = {'lat': geographic_data[1], 'lon': geographic_data[0]}
                 return user_location
             else:
                 return {"message": "Aucune donnée géographique trouvée pour cette adresse."}
@@ -112,9 +113,9 @@ class StationManager():
         number_m = number_d // 30.44  # durée moyenne d'un m
         number_h = (number_d * 24)
         variation = DAORecord.get_var_grouparr_bydate(date_start, date_end)
-        more_frequented_arr = max(variation)[0]
-        '''key=lambda t: t[1] / globals()['number_{}'.format(cutting)]'''
-        return more_frequented_arr
+        more_frequented_arr = max(variation)
+        '''key = lambda t: t[1]/globals()['number_{}'.format(cutting)])[0]'''
+        return more_frequented_arr[0]
 
     def fill_tables(self, data):
 
@@ -170,3 +171,4 @@ class StationManager():
                 finally:
                     pass
             time.sleep(60)
+

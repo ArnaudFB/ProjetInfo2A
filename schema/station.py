@@ -19,28 +19,12 @@ class Station(BaseModel):
         return None
     @field_validator("station_uuid")
     def validate_station_uuid(cls, v):
-        if not(isinstance(v, int)):
-            raise TypeError('Station UUID must be an integer')
         if v<0:
             raise ValueError('Station UUID cannot be negative')
         return v
-        
-    @field_validator("station_name")
-    def station_name_not_valid(cls, v):
-        if not isinstance(v, str):
-            raise TypeError("Station name should be a string")
-        return v
 
-    @field_validator("loc")
-    def station_loc_not_valid(cls, v):  
-        if not isinstance(v, Location):
-            raise TypeError("Station location should be a location")
-        return v
-        
     @field_validator("numbikes")
     def station_numbikes_not_valid(cls, v):
-        if not isinstance(v, int):
-            raise TypeError("Number of bikes should be an integer")
         if v<0:
             raise ValueError("Number of bikes cannot be negative")
         return v

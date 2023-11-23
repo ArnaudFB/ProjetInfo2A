@@ -2,9 +2,6 @@ from database.init_db import Database
 from utils.singleton import Singleton
 from schema.station import Station
 from schema.location import Location
-from database.dao import DAO
-
-
 
 class DAOStation(metaclass=Singleton):
     
@@ -35,8 +32,10 @@ class DAOStation(metaclass=Singleton):
                                     station.get_station_lon,
                                     station.get_station_lat,))
             res = cursor.fetchone()
+
         if res:
             return not(created)
+
         return created
         
     # Get method to retrieve Station by it's UUID
@@ -47,6 +46,7 @@ class DAOStation(metaclass=Singleton):
             sql_get_station = "SELECT uuid, nom, nbvelo, lon, lat, arrondissement FROM Station WHERE uuid = ?"
             cursor.execute(sql_get_station, (uuid,))
             res = cursor.fetchone()
+
         if res:
             station_uuid = res[0]
             station_name = res[1]
@@ -59,7 +59,11 @@ class DAOStation(metaclass=Singleton):
                                  'loc':station_loc,
                                  'numbikes':station_nbvelo})
             return station
-        return f"unable to find a station name with UUID = {uuid}"
+
+        return Station(**{'station_uuid': 0,
+                                 'station_name': "",
+                                 'loc': Location(**{'lon': 0, 'lat': 0}),
+                                 'numbikes': 0})
     
     # Get method to retrieve Station by it's UUID
     def get_station_name_byuuid(uuid: int):
@@ -69,10 +73,12 @@ class DAOStation(metaclass=Singleton):
             sql_get_station = "SELECT nom FROM Station WHERE uuid = ?"
             cursor.execute(sql_get_station, (uuid,))
             res = cursor.fetchone()
+
         if res:
-            station_name = res['nom']
+            station_name = res[0]
             return station_name
-        return f"unable to find a station name with UUID = {uuid}"
+
+        return ""
     
     # Get method to retrieve Station's arrondissement by it's UUID
     def get_station_arr_byuuid(uuid: int):
@@ -82,10 +88,12 @@ class DAOStation(metaclass=Singleton):
             sql_get_station_arr = "SELECT arrondissement FROM Station WHERE uuid = ?"
             cursor.execute(sql_get_station_arr, (uuid,))
             res = cursor.fetchone()
+
         if res:
-            station_arr = res['arrondissement']
+            station_arr = res[0]
             return station_arr
-        return f"unable to find a station arrondissement with UUID = {uuid}"    
+
+        return 0
     
     # Get method to retrieve Station's location by it's UUID
     def get_station_loc_byuuid(uuid: int):
@@ -95,10 +103,12 @@ class DAOStation(metaclass=Singleton):
             sql_get_station_loc = "SELECT lon, lat FROM Station WHERE uuid = ?"
             cursor.execute(sql_get_station_loc, (uuid,))
             res = cursor.fetchone()
+
         if res:
-            station_loc = res['lon'], res['lat']
+            station_loc = res[0], res[1]
             return station_loc
-        return f"unable to find a station arrondissement with UUID = {uuid}" 
+
+        return Location(**{'lat': 0, 'lon': 0})
     
     # Get method to retrieve Station's bikes available by its UUID
     def get_station_numbikes_byuuid(uuid: int):
@@ -108,10 +118,12 @@ class DAOStation(metaclass=Singleton):
             sql_get_station_num_bikes = "SELECT nbvelo FROM Station WHERE uuid = ?"
             cursor.execute(sql_get_station_num_bikes, (uuid,))
             res = cursor.fetchone()
+
         if res:
             station_numbikes = res[0]
             return station_numbikes
-        return f"unable to find a station's bikes number with UUID = {uuid}" 
+
+        return -1
     
     
     def update_station(station: Station):
@@ -133,6 +145,8 @@ class DAOStation(metaclass=Singleton):
                                                 station.get_station_lat,
                                                 station.get_station_id,))
             res = cursor.fetchone()
+
         if res:
             return not(updated)
+
         return updated

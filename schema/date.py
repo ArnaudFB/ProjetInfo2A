@@ -7,6 +7,7 @@ class Date(BaseModel):
     def date_cant_be_in_future(cls, v):
         if v > datetime.now():
             raise ValueError("Date can't be in the future.")
+
         return v
     
     @property

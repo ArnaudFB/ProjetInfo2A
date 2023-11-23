@@ -2,19 +2,19 @@ from utils.singleton import Singleton
 from database.init_db import Database
 from schema.record import Record
 from datetime import datetime 
-
+from database.dao import DAO
 
 class DAORecord(metaclass=Singleton):
     
     def get_all(record:Record) -> dict[Record]:
 
-        with Database().getConnection() as connection:
+        with Database().get_connection() as connection:
             cursor = connection.cursor()
             sqlGetAllRecord = """SELECT * FROM Record;"""
             cursor.execute(sqlGetAllRecord)
             res=cursor.fetchall()
 
-        return
+        return res
 
     def add_new(record: Record) -> bool:
 
@@ -30,8 +30,10 @@ class DAORecord(metaclass=Singleton):
                     )
             cursor.execute(sql_add_station, values)
             res = cursor.fetchone()
+
         if res:
             return not(created)
+
         return created
     
     def get_var_bystation_date_existing_station(station_uuid: int, date_start : datetime, date_end : datetime) -> list[int]:
@@ -48,13 +50,15 @@ class DAORecord(metaclass=Singleton):
                     date_end,)
             cursor.execute(sql_get_record, values)
             res = cursor.fetchall()
+
         if res:
             records=[]
-            for r in range(len(res)): 
-                record = res[r]['variation']
+            for r in range(len(res)):
+                record = res[r][0]
                 records.append(record)
             return records
-        return f"unable to find a record for station {station_uuid} between {date_start} and {date_end}"
+
+        return []
 
     def get_var_groupstation_bydate(date_start : datetime, date_end : datetime) -> list[tuple]:
         
@@ -67,13 +71,15 @@ class DAORecord(metaclass=Singleton):
                             GROUP BY station_uuid  """
             cursor.execute(sql_get_record, (date_start, date_end,))
             res = cursor.fetchall()
+
         if res:
             records=[]
-            for r in range(len(res)): 
-                record = res[r][0],res[r][1]
+            for r in range(len(res)):
+                record = res[r][0], res[r][1]
                 records.append(record)
             return records
-        return f"unable to find a record between {date_start} and {date_end}"
+
+        return []
 
     def get_var_byarr_date(arrondissement : int , date_start : datetime, date_end : datetime) -> list[tuple]:
         
@@ -89,14 +95,15 @@ class DAORecord(metaclass=Singleton):
                                         date_start,
                                         date_end,))
             res = cursor.fetchall()
+
         if res:
             records=[]
-            for r in range(len(res)): 
+            for r in range(len(res)):
                 record = res[r][0]
                 records.append(record)
             return records
-        return f"unable to find a record between {date_start} and {date_end} in arrondissement {arrondissement}"
 
+        return []
     def get_var_grouparr_bydate(date_start : datetime, date_end : datetime) -> list[tuple]:
         
         with Database().get_connection() as connection:
@@ -110,10 +117,12 @@ class DAORecord(metaclass=Singleton):
                             GROUP BY arrondissement  """
             cursor.execute(sql_get_record, (date_start, date_end,))
             res = cursor.fetchall()
+
         if res:
             records=[]
-            for r in range(len(res)): 
-                record = res[r][0],res[r][1]
+            for r in range(len(res)):
+                record = res[r][0], res[r][1]
                 records.append(record)
             return records
-        return f"unable to find a record between {date_start} and {date_end}"
+
+        return []
