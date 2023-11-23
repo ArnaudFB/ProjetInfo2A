@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, validator
 from typing import Optional
 from schema.location import Location
 class Station(BaseModel):
@@ -8,6 +8,15 @@ class Station(BaseModel):
     loc: Location
     numbikes: int
     station_arr: Optional[int] = None
+
+    @validator('station_arr', pre=True, always=True)
+    def set_station_arr(cls, v, values):
+        station_uuid = str(values.get('station_uuid', ''))  # Get station_uuid from values
+        if station_uuid:
+            arr_num = int(station_uuid[:-3])
+            if arr_num <= 20:
+                return arr_num
+        return None
     @field_validator("station_uuid")
     def validate_station_uuid(cls, v):
         if not(isinstance(v, int)):
