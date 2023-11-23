@@ -22,6 +22,8 @@ Third functionality:
 # Installation
 
 The installation is straight forward. First, you have to install the required dependencies, that can be done with the following command :
-'''pip install -r requirements.txt'''
+```
+pip install -r requirements.txt
+```
 
 Then, all you have to do is to launch the main.py file and connect yourself to the ip provided
