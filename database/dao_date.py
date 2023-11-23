@@ -3,7 +3,7 @@ from utils.singleton import Singleton
 from schema.date import Date
 from database.dao import DAO
 
-class DAODate(DAO,metaclass=Singleton):
+class DAODate(metaclass=Singleton):
 
     def get_all(date:Date) -> dict[Date]:
 

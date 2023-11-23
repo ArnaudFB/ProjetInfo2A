@@ -10,7 +10,7 @@ from datetime import datetime
 import requests
 import time
 
-
+ETALAB_GEO_API = "https://api-adresse.data.gouv.fr/search/"
 class StationManager():
 
     def __init__(self, base_url: str):
@@ -126,3 +126,21 @@ class StationManager():
                 finally:
                     pass
             time.sleep(60)
+
+    
+    def get_geographic_data(address: str ):
+        params = {'q': address, 'limit': 1}
+        response = requests.get(ETALAB_GEO_API, params=params)
+
+        if response.status_code == 200:
+            data = response.json()
+            if data.get('features'):
+                geographic_data = data['features'][0]['geometry']['coordinates']
+                user_location = {'lat': geographic_data[1], 'lon': geographic_data[0]}
+                return user_location
+            else:
+                return {"message": "Aucune donnée géographique trouvée pour cette adresse."}
+        else:
+            return {"message": "Erreur lors de la récupération des données géographiques."}    
+
+

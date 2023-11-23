@@ -4,7 +4,7 @@ from schema.record import Record
 from datetime import datetime 
 from database.dao import DAO
 
-class DAORecord(DAO, metaclass=Singleton):
+class DAORecord(metaclass=Singleton):
     
     def get_all(record:Record) -> dict[Record]:
 
