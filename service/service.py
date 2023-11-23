@@ -1,14 +1,16 @@
-from schema.station import Station
-from schema.location import Location
-from schema.date import Date
-from schema.record import Record
-from database.dao_station import DAOStation
+import time
+from datetime import datetime
+
+import requests
+from vincenty import vincenty
+
 from database.dao_date import DAODate
 from database.dao_record import DAORecord
-from vincenty import vincenty
-from datetime import datetime
-import requests
-import time
+from database.dao_station import DAOStation
+from schema.date import Date
+from schema.location import Location
+from schema.record import Record
+from schema.station import Station
 
 ETALAB_GEO_API = "https://api-adresse.data.gouv.fr/search/"
 class StationManager():
@@ -74,6 +76,46 @@ class StationManager():
         nearest_station = min(distance)[1]
         return Station(**nearest_station)
 
+    def get_geographic_data(address: str):
+        ETALAB_GEO_API = "https://api-adresse.data.gouv.fr/search/"
+        params = {'q': address, 'limit': 1}
+        response = requests.get(ETALAB_GEO_API, params=params)
+
+        if response.status_code == 200:
+            data = response.json()
+            if data.get('features'):
+                geographic_data = data['features'][0]['geometry']['coordinates']
+                user_location = {'lat': geographic_data[1], 'lon': geographic_data[0]}
+                return user_location
+            else:
+                return {"message": "Aucune donnée géographique trouvée pour cette adresse."}
+        else:
+            return {"message": "Erreur lors de la récupération des données géographiques."}
+
+    def get_min_frequentation_station(date_start: datetime, date_end: datetime, cutting: str) -> int:
+        number_d = (date_end - date_start).days
+        number_w = number_d // 7
+        number_m = number_d // 30.44  # durée moyenne d'un m
+        number_h = (number_d * 24)
+
+        variation = DAORecord.get_var_groupstation_bydate(date_start, date_end)
+
+        less_frequented_station_uuid = min(variation)[0]
+        '''key=lambda t: t[1] / globals()['number_{}'.format(cutting)]'''
+        station = DAOStation.get_station_byuuid(less_frequented_station_uuid)
+
+        return station
+
+    def get_max_frequentation_arrondissement(date_start: datetime, date_end: datetime, cutting: str) -> int:
+        number_d = (date_end - date_start).days
+        number_w = number_d // 7
+        number_m = number_d // 30.44  # durée moyenne d'un m
+        number_h = (number_d * 24)
+        variation = DAORecord.get_var_grouparr_bydate(date_start, date_end)
+        more_frequented_arr = max(variation)
+        #, key = lambda t: t[1]/globals()['number_{}'.format(cutting)])[0]
+        return more_frequented_arr
+
     def fill_tables(self, data):
 
         data_station = data
@@ -86,7 +128,8 @@ class StationManager():
             nbvelo = records['numbikesavailable']
             station_loc = Location(lon=lon, lat=lat)
 
-            new_station = Station(station_uuid=station_uuid, station_name=station_name, loc=station_loc, numbikes=nbvelo)
+            new_station = Station(station_uuid=station_uuid, station_name=station_name, loc=station_loc,
+                                  numbikes=nbvelo)
 
             DAOStation.add_new(station=new_station)
 
@@ -112,7 +155,8 @@ class StationManager():
                 station_loc = Location(lat=lat, lon=lon)
                 nbvelo = records['numbikesavailable']
 
-                update_station = Station(station_uuid=station_id, station_name=station_name, loc=station_loc, numbikes=nbvelo)
+                update_station = Station(station_uuid=station_id, station_name=station_name, loc=station_loc,
+                                         numbikes=nbvelo)
 
                 try:
                     previous_num_bikes = DAOStation.get_station_numbikes_byuuid(uuid=station_id)

@@ -70,10 +70,10 @@ class DAORecord(metaclass=Singleton):
         if res:
             records=[]
             for r in range(len(res)): 
-                record = res[r]['station_uuid'],res[r]['sum(variation)']
+                record = tuple(res[r][0],res[r][1])
                 records.append(record)
             return records
-        return f"unable to find a record between {date_start} and {date_end}"
+        return tuple([3, 3])
 
     def get_var_byarr_date(arrondissement : int , date_start : datetime, date_end : datetime) -> list[tuple]:
         
@@ -92,7 +92,7 @@ class DAORecord(metaclass=Singleton):
         if res:
             records=[]
             for r in range(len(res)): 
-                record = res[r]['variation']
+                record = res[r][0]
                 records.append(record)
             return records
         return f"unable to find a record between {date_start} and {date_end} in arrondissement {arrondissement}"
@@ -106,13 +106,14 @@ class DAORecord(metaclass=Singleton):
                             INNER JOIN Station s on s.uuid=r.station_uuid 
                             WHERE (date_minute>= ?) 
                             AND (date_minute<= ?)
+                            AND arrondissement IS NOT NULL 
                             GROUP BY arrondissement  """
             cursor.execute(sql_get_record, (date_start, date_end,))
             res = cursor.fetchall()
         if res:
             records=[]
             for r in range(len(res)): 
-                record = res[r]['arrondissement'],res[r]['sum(variation)']
+                record = tuple(res[r][0],res[r][1])
                 records.append(record)
             return records
-        return f"unable to find a record between {date_start} and {date_end}"
+        return tuple([3, 3])

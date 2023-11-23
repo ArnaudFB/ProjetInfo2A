@@ -1,5 +1,5 @@
 from api.api_handler import ApiVelib
-from service.station_manager import StationManager
+from service.service import StationManager
 import threading
 
 api_thread = threading.Thread(target=ApiVelib.run_api)

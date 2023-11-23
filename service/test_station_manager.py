@@ -1,7 +1,7 @@
 import unittest
 from database.dao_record import DAORecord  
 from database.dao_station import DAOStation
-from service.station_manager import StationManager
+from service.service import StationManager
 from schema.location import Location
 class TestStationManager(unittest.TestCase):
 

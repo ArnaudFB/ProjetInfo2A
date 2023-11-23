@@ -49,13 +49,16 @@ class DAOStation(metaclass=Singleton):
             cursor.execute(sql_get_station, (uuid,))
             res = cursor.fetchone()
         if res:
-            station_uuid = res['uuid']
-            station_name = res['nom']
-            station_nbvelo = res['nbvelo']
-            station_lon = res['lon']
-            station_lat = res['lat']
-            station_loc = Location(station_lon, station_lat)
-            station = Station(station_uuid, station_name, station_loc, station_nbvelo)
+            station_uuid = res[0]
+            station_name = res[1]
+            station_nbvelo = res[2]
+            station_lon = res[3]
+            station_lat = res[4]
+            station_loc = Location(**{'lon': station_lon, 'lat': station_lat})
+            station = Station(**{'station_uuid':station_uuid,
+                                 'station_name':station_name,
+                                 'loc':station_loc,
+                                 'numbikes':station_nbvelo})
             return station
         return f"unable to find a station name with UUID = {uuid}"
     
