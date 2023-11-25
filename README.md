@@ -11,7 +11,7 @@ This application is meant to offer several functionalities to their users in ord
 # Example
 
 ## First functionality:
-When searching for the nearest station with at least 1 available bike, the user would input /fonctionnalite-1/ the API will return by default the nearest station to these coordinates 48.8563199, 2.31345367 . But if the user choose to add an input, he can do so in two manners. He can input /fonctionnalite-1/?user_location=lat,lon with lat being the user's latitude and lon the user's longitude. Or he can input /fonctionnalite-1/?user_adress=some_adress with some_adress a plain text adress of the user's location. We recommand using the doc available to automatically create the request for the adress as it is in a special format for the request.
+When searching for the nearest station with at least 1 available bike, the user would input /fonctionnalite-1/ after the root and the API will return by default the nearest station to the following coordinates 48.8563199, 2.31345367 . But if the user choose to add an input, he can do so in two manners. He can input /fonctionnalite-1/?user_location=lat,lon with lat being the user's latitude and lon the user's longitude. Or he can input /fonctionnalite-1/?user_adress=some_adress with some_adress a plain text adress of the user's location. We recommand using the doc available to automatically create the request for the adress as it is in a special format for the request.
 
 ```
 http://127.0.0.1:8000/fonctionnalite-1/
@@ -38,7 +38,7 @@ Will result in :
 ```
 
 ## Second functionality:
-When looking for the least frequented station on a period of time, the user would input /fonctionnalite-2/?date_debut=date1&date_fin=date2 . date1 is the start date to look for, date2 the finish date to look for. If the user doesn't specify one of those, date1 will be considered as 1-01-01 00:00:00 and date2 as the current date. We recommand you use the doc available to automatically create your requests as the date are in a special format for the request.
+When looking for the least frequented station on a period of time, the user would input /fonctionnalite-2/?date_debut=date1&date_fin=date2 after the root of the API. date1 is the start date to look for, date2 the finish date to look for. If the user doesn't specify one of those, date1 will be considered as 1-01-01 00:00:00 and date2 as the current date. We recommand you use the doc available to automatically create your requests as the date are in a special format for the request.
 
 ```
 http://127.0.0.1:8000/fonctionnalite-2/
@@ -73,7 +73,7 @@ Will result in :
 ```
 
 ## Third functionality:
-When looking for the most frequented Paris borough on a period of time, the user would input /fonctionnalite-3/?date_debut=date1&date_fin=date2 . With the same variables as defined above. We recommand you use the doc available to automatically create your requests for the same reason explained above.
+When looking for the most frequented Paris borough on a period of time, the user would input /fonctionnalite-3/?date_debut=date1&date_fin=date2 after the root of the API. With the same variables as defined above. We recommand you use the doc available to automatically create your requests for the same reason explained above.
 
 The usage of the third functionality will be exactly as it is for fhe second functionality except that the user will have to change fonctionnalite-2 into fonctionnalite-3 in the request and the output will be an integer representing the Paris borough
 
