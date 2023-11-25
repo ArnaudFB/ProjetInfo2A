@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
-from database import DAOStation
-from data import Station, Location
+from database import dao_station
+from schema import station, location
 
 class TestDAOStation(unittest.TestCase):
 
