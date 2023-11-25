@@ -48,8 +48,8 @@ class ApiVelib():
 
         else:
 
-            user_location = (48.853428, 2.347904)
-            station =  StationManager(BASE_URL).get_stations()
+            user_location = (48.8563199, 2.31345367)
+            station = StationManager(BASE_URL).get_stations()
             station = StationManager.get_available_station(station)
             station = StationManager.get_nearest_station(station, user_location)
 
