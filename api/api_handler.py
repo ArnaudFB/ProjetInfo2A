@@ -16,6 +16,14 @@ app = FastAPI()
 BASE_URL = "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel/exports/json"
 
 class ApiVelib():
+
+    @app.get("/")
+    def welcome_to_velib_hunter_api():
+        return {"Bonjour, bienvenue sur le Projet Informatique 2A de l'équipe 8 !"
+                " Pour utiliser l'API Vélib'Hunter, nous vous conseillons de lire la doc à l'adresse :"
+                " 127.0.0.1:8000/docs ou de lire le fichier README du Github du projet à l'adresse :"
+                " https://github.com/ArnaudFB/ProjetInfo2A/blob/main/README.md"}
+
     @app.get("/fonctionnalite-1/", response_model=Station)
     def get_nearest_station(user_adress: Optional[str] = Query(None), user_location: Optional[str] = Query(None)):
 
