@@ -1,5 +1,5 @@
 fastapi~=0.104.0
-requests~=2.31.0
+requests~=2.32.0
 uvicorn~=0.23.2
 httpx~=0.25.0
 vincenty~=0.1.4
